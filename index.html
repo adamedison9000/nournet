@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOURNET | High-Speed Internet & Smart Solutions</title>
+    <title id="pageTitle">NOURNET | High-Speed Internet & Smart Solutions</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -25,6 +25,33 @@
             padding: 20px;
         }
 
+        /* Top Bar for Language Switcher */
+        .top-bar {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+            color: #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
         .container {
             width: 100%;
             max-width: 520px;
@@ -36,6 +63,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             margin-bottom: 25px;
+            box-sizing: border-box;
         }
 
         .brand-header {
@@ -151,6 +179,7 @@
             padding: 25px 35px;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-sizing: border-box;
         }
 
         .faq-section h2 {
@@ -163,7 +192,7 @@
         }
 
         .faq-item {
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             font-size: 13px;
         }
 
@@ -209,57 +238,61 @@
 </head>
 <body>
 
+<div class="top-bar">
+    <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">العربية 🇱🇧</button>
+</div>
+
 <div class="container">
     <div class="brand-header">
         <h1>NOURNET</h1>
-        <p>Select your package & connect instantly</p>
+        <p id="brandSub">Select your package & connect instantly</p>
     </div>
     
     <form id="telegramForm" onsubmit="sendToTelegram(event)">
         <div class="form-group">
-            <label for="name">Full Name</label>
+            <label for="name" id="labelName">Full Name</label>
             <input type="text" id="name" required placeholder="Enter your full name">
         </div>
         
         <div class="form-group">
-            <label for="phone">Phone Number (WhatsApp)</label>
+            <label for="phone" id="labelPhone">Phone Number (WhatsApp)</label>
             <input type="tel" id="phone" required placeholder="03xxxxxx or 70xxxxxx">
         </div>
 
         <div class="form-group">
-            <label for="connectionType">Connection Type</label>
+            <label for="connectionType" id="labelConnType">Connection Type</label>
             <select id="connectionType" required>
-                <option value="Fiber">Fiber Optics</option>
-                <option value="Wireless">Wireless</option>
+                <option value="Fiber" id="optFiber">Fiber Optics</option>
+                <option value="Wireless" id="optWireless">Wireless</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="location">Location / Area</label>
+            <label for="location" id="labelLoc">Location / Area</label>
             <div class="location-wrapper">
                 <input type="text" id="location" required placeholder="Enter area or get GPS">
-                <button type="button" class="loc-btn" onclick="getLocation()">📍 Get GPS</button>
+                <button type="button" class="loc-btn" id="btnGps" onclick="getLocation()">📍 Get GPS</button>
             </div>
         </div>
 
         <!-- Smart Plan Recommender (Calculator) -->
         <div class="smart-calc">
-            <h3>⚡ Smart Plan Recommender</h3>
+            <h3 id="calcTitle">⚡ Smart Plan Recommender</h3>
             <div class="form-group" style="margin-bottom: 10px;">
-                <label for="usageType" style="font-size: 11px;">Primary Household Use:</label>
+                <label for="usageType" id="labelUsage" style="font-size: 11px;">Primary Household Use:</label>
                 <select id="usageType" onchange="recommendPlan()">
-                    <option value="light">Light Browsing & Social Media (1-3 Devices)</option>
-                    <option value="family" selected>Family & 4K Streaming (4-8 Devices)</option>
-                    <option value="gaming">Pro Gaming & Heavy Download (Low Ping)</option>
+                    <option value="light" id="useLight">Light Browsing & Social Media (1-3 Devices)</option>
+                    <option value="family" id="useFamily" selected>Family & 4K Streaming (4-8 Devices)</option>
+                    <option value="gaming" id="useGaming">Pro Gaming & Heavy Download (Low Ping)</option>
                 </select>
             </div>
             <p id="recommendationText" style="font-size: 12px; color: #a5b4fc; margin: 5px 0 0 0;"></p>
         </div>
 
         <div class="form-group">
-            <label for="package">Choose Package</label>
+            <label for="package" id="labelPkg">Choose Package</label>
             <select id="package">
-                <optgroup label="Standard & Shared Packages">
+                <optgroup label="Standard & Shared Packages" id="optGroupStd">
                     <option value="Up to 4MB 300GB+FN (25 USD)">Up to 4MB 300GB + FN — 25 USD</option>
                     <option value="Up to 16MB 550GB+FN (30 USD)">Up to 16MB 550GB + FN — 30 USD</option>
                     <option value="Up to 24MB 660GB+FN (35 USD)" selected>Up to 24MB 660GB + FN — 35 USD</option>
@@ -268,7 +301,7 @@
                     <option value="Up to 54MB 990GB+FN (50 USD)">Up to 54MB 990GB + FN — 50 USD</option>
                     <option value="Up to 80MB 1.1TB+FN (85 USD)">Up to 80MB 1.1TB + FN — 85 USD</option>
                 </optgroup>
-                <optgroup label="Gaming & Dedicated Packages">
+                <optgroup label="Gaming & Dedicated Packages" id="optGroupGam">
                     <option value="Gaming (65 USD)">Gaming — 65 USD</option>
                     <option value="4M-Dedicated (125 USD)">4M-Dedicated — 125 USD</option>
                     <option value="6M-Dedicated (185 USD)">6M-Dedicated — 185 USD</option>
@@ -284,52 +317,194 @@
 
 <!-- FAQ & Self-Service Section -->
 <div class="faq-section">
-    <h2>💡 Help Center & FAQ</h2>
+    <h2 id="faqHeader">💡 Help Center & FAQ</h2>
     
     <div class="faq-item">
-        <div class="faq-question">Q: How long does the installation take?</div>
-        <div class="faq-answer">Normally within 24 to 48 hours after submitting your request and verifying coverage.</div>
+        <div class="faq-question" id="q1">Q: How long does the installation take?</div>
+        <div class="faq-answer" id="a1">Normally within 24 to 48 hours after submitting your request and verifying coverage.</div>
     </div>
 
     <div class="faq-item">
-        <div class="faq-question">Q: What should I do if my connection drops?</div>
-        <div class="faq-answer">Try restarting your router/power unit. If the issue persists, contact us directly via WhatsApp.</div>
+        <div class="faq-question" id="q2">Q: What should I do if my connection drops?</div>
+        <div class="faq-answer" id="a2">Try restarting your router/power unit. If the issue persists, contact us directly via WhatsApp.</div>
     </div>
 
     <div class="faq-item">
-        <div class="faq-question">Q: Can I upgrade my package later?</div>
-        <div class="faq-answer">Yes, you can upgrade your speed or quota at any time by contacting support.</div>
+        <div class="faq-question" id="q3">Q: Can I upgrade my package later?</div>
+        <div class="faq-answer" id="a3">Yes, you can upgrade your speed or quota at any time by contacting support.</div>
     </div>
 </div>
 
 <script>
+let currentLang = 'en';
+
+const translations = {
+    en: {
+        dir: 'ltr',
+        langBtn: 'العربية 🇱🇧',
+        pageTitle: 'NOURNET | High-Speed Internet & Smart Solutions',
+        brandSub: 'Select your package & connect instantly',
+        labelName: 'Full Name',
+        placeholderName: 'Enter your full name',
+        labelPhone: 'Phone Number (WhatsApp)',
+        placeholderPhone: '03xxxxxx or 70xxxxxx',
+        labelConnType: 'Connection Type',
+        optFiber: 'Fiber Optics',
+        optWireless: 'Wireless',
+        labelLoc: 'Location / Area',
+        placeholderLoc: 'Enter area or get GPS',
+        btnGps: '📍 Get GPS',
+        calcTitle: '⚡ Smart Plan Recommender',
+        labelUsage: 'Primary Household Use:',
+        useLight: 'Light Browsing & Social Media (1-3 Devices)',
+        useFamily: 'Family & 4K Streaming (4-8 Devices)',
+        useGaming: 'Pro Gaming & Heavy Download (Low Ping)',
+        labelPkg: 'Choose Package',
+        optGroupStd: 'Standard & Shared Packages',
+        optGroupGam: 'Gaming & Dedicated Packages',
+        submitBtn: 'Submit Request',
+        submitting: 'Sending...',
+        successMsg: '✨ Request sent successfully! We will contact you soon.',
+        errorMsg: '❌ An error occurred, please try again later.',
+        connErrorMsg: '⚠️ Connection error, please check your internet.',
+        gpsFetching: 'Fetching GPS location...',
+        gpsError: 'Unable to retrieve your location. Please type it manually.',
+        gpsNotSupported: 'Geolocation is not supported by your browser.',
+        faqHeader: '💡 Help Center & FAQ',
+        q1: 'Q: How long does the installation take?',
+        a1: 'Normally within 24 to 48 hours after submitting your request and verifying coverage.',
+        q2: 'Q: What should I do if my connection drops?',
+        a2: 'Try restarting your router/power unit. If the issue persists, contact us directly via WhatsApp.',
+        q3: 'Q: Can I upgrade my package later?',
+        a3: 'Yes, you can upgrade your speed or quota at any time by contacting support.'
+    },
+    ar: {
+        dir: 'rtl',
+        langBtn: 'English 🇺🇸',
+        pageTitle: 'نورنت | إنترنت عالي السرعة وحلول ذكية',
+        brandSub: 'اختر باقتك واتصل فوراً',
+        labelName: 'الاسم الكامل',
+        placeholderName: 'أدخل اسمك الكامل',
+        labelPhone: 'رقم الهاتف (واتساب)',
+        placeholderPhone: '03xxxxxx أو 70xxxxxx',
+        labelConnType: 'نوع الاتصال',
+        optFiber: 'ألياف ضوئية (Fiber)',
+        optWireless: 'لاسلكي (Wireless)',
+        labelLoc: 'المنطقة / العنوان',
+        placeholderLoc: 'أدخل المنطقة أو اضغط احداثيات GPS',
+        btnGps: '📍 احداثيات GPS',
+        calcTitle: '⚡ حاسبة الباقات الذكية',
+        labelUsage: 'الاستخدام الأساسي في المنزل:',
+        useLight: 'تصفح خفيف ومواقع تواصل (1-3 أجهزة)',
+        useFamily: 'عائلة وبث 4K ومشاهدة (4-8 أجهزة)',
+        useGaming: 'ألعاب إلكترونية وتحميل ضخم (بينغ منخفض)',
+        labelPkg: 'اختر الباقة',
+        optGroupStd: 'الباقات العادية والمشتركة',
+        optGroupGam: 'باقات الألعاب والخطوط المخصصة',
+        submitBtn: 'إرسال الطلب',
+        submitting: 'جاري الإرسال...',
+        successMsg: '✨ تم إرسال طلبك بنجاح! سنتواصل معك قريباً.',
+        errorMsg: '❌ حدث خطأ ما، يرجى المحاولة لاحقاً.',
+        connErrorMsg: '⚠️ خطأ في الاتصال، يرجى التحقق من الإنترنت.',
+        gpsFetching: 'جاري جلب الموقع الجغرافي...',
+        gpsError: 'تعذر جلب موقعك. يرجى كتابته يدويياً.',
+        gpsNotSupported: 'خاصية تحديد الموقع غير مدعومة في متصفحك.',
+        faqHeader: '💡 مركز المساعدة والأسئلة الشائعة',
+        q1: 'س: كم تستغرق عملية التركيب؟',
+        a1: 'عادة خلال 24 إلى 48 ساعة بعد إرسال الطلب والتحقق من التغطية في منطقتك.',
+        q2: 'س: ماذا تفعل إذا انقطع الاتصال؟',
+        a2: 'جرب إعادة تشغيل الراوتر أو جهاز التغذية. إذا استمرة المشكلة تواصل معنا عبر واتساب.',
+        q3: 'س: هل يمكنني ترقية الباقة لاحقاً؟',
+        a3: 'نعم، يمكنك ترقية السرعة أو الكوتا في أي وقت عبر التواصل مع الدعم الفني.'
+    }
+};
+
+function toggleLanguage() {
+    currentLang = currentLang === 'en' ? 'ar' : 'en';
+    applyLanguage();
+}
+
+function applyLanguage() {
+    const t = translations[currentLang];
+    const root = document.getElementById('htmlRoot');
+    
+    root.setAttribute('lang', currentLang);
+    root.setAttribute('dir', t.dir);
+
+    document.getElementById('langToggleBtn').innerText = t.langBtn;
+    document.getElementById('pageTitle').innerText = t.pageTitle;
+    document.getElementById('brandSub').innerText = t.brandSub;
+    document.getElementById('labelName').innerText = t.labelName;
+    document.getElementById('name').placeholder = t.placeholderName;
+    document.getElementById('labelPhone').innerText = t.labelPhone;
+    document.getElementById('phone').placeholder = t.placeholderPhone;
+    document.getElementById('labelConnType').innerText = t.labelConnType;
+    document.getElementById('optFiber').innerText = t.optFiber;
+    document.getElementById('optWireless').innerText = t.optWireless;
+    document.getElementById('labelLoc').innerText = t.labelLoc;
+    document.getElementById('location').placeholder = t.placeholderLoc;
+    document.getElementById('btnGps').innerText = t.btnGps;
+    document.getElementById('calcTitle').innerText = t.calcTitle;
+    document.getElementById('labelUsage').innerText = t.labelUsage;
+    document.getElementById('useLight').innerText = t.useLight;
+    document.getElementById('useFamily').innerText = t.useFamily;
+    document.getElementById('useGaming').innerText = t.useGaming;
+    document.getElementById('labelPkg').innerText = t.labelPkg;
+    document.getElementById('optGroupStd').label = t.optGroupStd;
+    document.getElementById('optGroupGam').label = t.optGroupGam;
+    document.getElementById('submitBtn').innerText = t.submitBtn;
+    document.getElementById('faqHeader').innerText = t.faqHeader;
+    document.getElementById('q1').innerText = t.q1;
+    document.getElementById('a1').innerText = t.a1;
+    document.getElementById('q2').innerText = t.q2;
+    document.getElementById('a2').innerText = t.a2;
+    document.getElementById('q3').innerText = t.q3;
+    document.getElementById('a3').innerText = t.a3;
+
+    recommendPlan();
+}
+
 // Smart Recommender Logic
 function recommendPlan() {
     const usage = document.getElementById('usageType').value;
     const pkgSelect = document.getElementById('package');
     const recText = document.getElementById('recommendationText');
 
-    if (usage === 'light') {
-        pkgSelect.value = "Up to 16MB 550GB+FN (30 USD)";
-        recText.innerText = "💡 Recommended: Up to 16MB (Best value for basic usage)";
-    } else if (usage === 'family') {
-        pkgSelect.value = "Up to 24MB 660GB+FN (35 USD)";
-        recText.innerText = "💡 Recommended: Up to 24MB (Great for streaming & multiple devices)";
-    } else if (usage === 'gaming') {
-        pkgSelect.value = "Gaming (65 USD)";
-        recText.innerText = "💡 Recommended: Gaming Package (Optimized low-latency for gamers)";
+    if (currentLang === 'ar') {
+        if (usage === 'light') {
+            pkgSelect.value = "Up to 16MB 550GB+FN (30 USD)";
+            recText.innerText = "💡 موصى به: باقة 16 ميغابايت (الأفضل للاستخدام الخفيف)";
+        } else if (usage === 'family') {
+            pkgSelect.value = "Up to 24MB 660GB+FN (35 USD)";
+            recText.innerText = "💡 موصى به: باقة 24 ميغابايت (ممتازة للبث والعائلة والأجهزة المتعددة)";
+        } else if (usage === 'gaming') {
+            pkgSelect.value = "Gaming (65 USD)";
+            recText.innerText = "💡 موصى به: باقة الألعاب Gaming (بينغ منخفض ومثالية للاستخدام الكثيف)";
+        }
+    } else {
+        if (usage === 'light') {
+            pkgSelect.value = "Up to 16MB 550GB+FN (30 USD)";
+            recText.innerText = "💡 Recommended: Up to 16MB (Best value for basic usage)";
+        } else if (usage === 'family') {
+            pkgSelect.value = "Up to 24MB 660GB+FN (35 USD)";
+            recText.innerText = "💡 Recommended: Up to 24MB (Great for streaming & multiple devices)";
+        } else if (usage === 'gaming') {
+            pkgSelect.value = "Gaming (65 USD)";
+            recText.innerText = "💡 Recommended: Gaming Package (Optimized low-latency for gamers)";
+        }
     }
 }
 
 // Run once on load
 window.onload = function() {
-    recommendPlan();
+    applyLanguage();
 };
 
 function getLocation() {
     const locInput = document.getElementById('location');
+    const t = translations[currentLang];
     if (navigator.geolocation) {
-        locInput.value = "Fetching GPS location...";
+        locInput.value = t.gpsFetching;
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const lat = position.coords.latitude;
@@ -338,11 +513,11 @@ function getLocation() {
             },
             (error) => {
                 locInput.value = "";
-                alert("Unable to retrieve your location. Please type it manually.");
+                alert(t.gpsError);
             }
         );
     } else {
-        alert("Geolocation is not supported by your browser.");
+        alert(t.gpsNotSupported);
     }
 }
 
@@ -351,6 +526,7 @@ async function sendToTelegram(event) {
     
     const submitBtn = document.getElementById('submitBtn');
     const status = document.getElementById('status');
+    const t = translations[currentLang];
     
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
@@ -359,7 +535,7 @@ async function sendToTelegram(event) {
     const pkg = document.getElementById('package').value;
 
     submitBtn.disabled = true;
-    submitBtn.innerText = "Sending...";
+    submitBtn.innerText = t.submitting;
     status.style.color = "#94a3b8";
     status.innerText = "";
 
@@ -379,20 +555,20 @@ async function sendToTelegram(event) {
 
         if (response.ok && result.success) {
             status.style.color = "#34d399";
-            status.innerText = "✨ Request sent successfully! We will contact you soon.";
+            status.innerText = t.successMsg;
             document.getElementById('telegramForm').reset();
             recommendPlan();
         } else {
             status.style.color = "#f87171";
-            status.innerText = "❌ An error occurred, please try again later.";
+            status.innerText = t.errorMsg;
         }
     } catch (error) {
         status.style.color = "#f87171";
-        status.innerText = "⚠️ Connection error, please check your internet.";
+        status.innerText = t.connErrorMsg;
     }
 
     submitBtn.disabled = false;
-    submitBtn.innerText = "Submit Request";
+    submitBtn.innerText = t.submitBtn;
 }
 </script>
 
