@@ -5,6 +5,7 @@ export default async function handler(req, res) {
 
     const { name, phone, location, package: pkg } = req.body;
 
+    // تأكد هنا من صحة التوكن الخاص ببوتك والـ Chat ID الخاص بك
     const botToken = "8785423339:AAFa1z7mfHn2uAHRhJGarioyiciSwYpqrxQ";
     const chatId = "2055556738";
 
@@ -27,6 +28,7 @@ export default async function handler(req, res) {
         if (data.ok) {
             return res.status(200).json({ success: true });
         } else {
+            // سيعرض لنا هذا تفاصيل الخطأ القادم من تيليجرام مباشرة في سجلات Vercel
             return res.status(500).json({ error: 'Telegram API error', details: data });
         }
     } catch (error) {
