@@ -3,52 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOURNET - New Subscription Request</title>
+    <title>NOURNET | High-Speed Internet Subscription</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; padding: 20px; direction: ltr; text-align: left; margin: 0; }
-        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #0070f3; text-align: center; margin-bottom: 5px; }
-        p.subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 14px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; color: #333; font-weight: bold; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        button { background-color: #0070f3; color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; transition: background 0.3s; }
-        button:hover { background-color: #0051cc; }
-        #status { margin-top: 15px; text-align: center; font-weight: bold; font-size: 14px; }
-        .packages-info { background: #eef4ff; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 13px; color: #004085; line-height: 1.6; }
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin: 0 0 8px 0;
+            background: linear-gradient(90deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-header p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 15px;
+            color: #fff;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        select option {
+            background: #1e1b4b;
+            color: #fff;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #status {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>NOURNET</h2>
-    <p class="subtitle">Choose your preferred package and submit your subscription request easily</p>
-
-    <div class="packages-info">
-        <b>💡 Available Internet Packages:</b>
-        <ul style="margin: 5px 0 0 0; padding-left: 20px;">
-            <li>All speeds and updated prices included</li>
-        </ul>
+    <div class="brand-header">
+        <h1>NOURNET</h1>
+        <p>Select your package & connect instantly</p>
     </div>
     
     <form id="telegramForm" onsubmit="sendToTelegram(event)">
         <div class="form-group">
-            <label for="name">Full Name:</label>
+            <label for="name">Full Name</label>
             <input type="text" id="name" required placeholder="Enter your full name">
         </div>
         
         <div class="form-group">
-            <label for="phone">Phone Number (WhatsApp):</label>
+            <label for="phone">Phone Number (WhatsApp)</label>
             <input type="tel" id="phone" required placeholder="03xxxxxx or 70xxxxxx">
         </div>
 
         <div class="form-group">
-            <label for="location">Location / Area:</label>
+            <label for="location">Location / Area</label>
             <input type="text" id="location" required placeholder="Enter your exact area">
         </div>
 
         <div class="form-group">
-            <label for="package">Select Package:</label>
+            <label for="package">Choose Package</label>
             <select id="package">
                 <optgroup label="Standard & Shared Packages">
                     <option value="Up to 4MB 300GB+FN (25 USD)">Up to 4MB 300GB + FN — 25 USD</option>
@@ -87,7 +192,7 @@ async function sendToTelegram(event) {
 
     submitBtn.disabled = true;
     submitBtn.innerText = "Sending...";
-    status.style.color = "#555";
+    status.style.color = "#94a3b8";
     status.innerText = "";
 
     try {
@@ -100,16 +205,16 @@ async function sendToTelegram(event) {
         const result = await response.json();
 
         if (response.ok && result.success) {
-            status.style.color = "green";
-            status.innerText = "Request sent successfully! We will contact you soon.";
+            status.style.color = "#34d399";
+            status.innerText = "✨ Request sent successfully! We will contact you soon.";
             document.getElementById('telegramForm').reset();
         } else {
-            status.style.color = "red";
-            status.innerText = "An error occurred, please try again later.";
+            status.style.color = "#f87171";
+            status.innerText = "❌ An error occurred, please try again later.";
         }
     } catch (error) {
-        status.style.color = "red";
-        status.innerText = "Connection error, please check your internet.";
+        status.style.color = "#f87171";
+        status.innerText = "⚠️ Connection error, please check your internet.";
     }
 
     submitBtn.disabled = false;
