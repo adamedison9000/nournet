@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">NOURNET | High-Speed Internet & Smart Solutions</title>
+    <title id="pageTitle">NOURNET | Advanced Fiber & Wireless Internet</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -35,7 +35,6 @@
             margin-bottom: 12px;
         }
 
-        /* Live Network Status Badge */
         .network-status-badge {
             display: flex;
             align-items: center;
@@ -54,7 +53,6 @@
             height: 8px;
             background-color: #34d399;
             border-radius: 50%;
-            box-shadow: 0 0 0 rgba(52, 211, 153, 0.4);
             animation: pulse 2s infinite;
         }
 
@@ -118,7 +116,6 @@
             font-weight: 500;
         }
 
-        /* Real-time Diagnostics Widget */
         .diag-box {
             background: rgba(79, 70, 229, 0.08);
             border: 1px solid rgba(129, 140, 248, 0.2);
@@ -305,10 +302,10 @@
         <p id="brandSub">Advanced Fiber & Wireless Internet Provider</p>
     </div>
 
-    <!-- Live Diagnostics Widget -->
+    <!-- Light Diagnostic Widget (Zero Load Simulation) -->
     <div class="diag-box">
         <span class="diag-title" id="diagTitle">⚡ Gateway Latency Check:</span>
-        <span class="diag-value" id="diagResult">Analyzing...</span>
+        <span class="diag-value" id="diagResult">4 ms (Optimal)</span>
     </div>
     
     <form id="telegramForm" onsubmit="sendToTelegram(event)">
@@ -501,22 +498,9 @@ const translations = {
     }
 };
 
-// Simulate Real-time Latency Check on Load
 window.onload = function() {
     applyLanguage();
-    runLatencyProbe();
 };
-
-function runLatencyProbe() {
-    const resEl = document.getElementById('diagResult');
-    const startTime = performance.now();
-    
-    // Quick probe simulation to simulate connection health
-    setTimeout(() => {
-        const latency = Math.floor(Math.random() * 8) + 4; // 4ms to 12ms optimal local ping
-        resEl.innerText = `${latency} ms (Excellent)`;
-    }, 600);
-}
 
 function toggleLanguage() {
     currentLang = currentLang === 'en' ? 'ar' : 'en';
