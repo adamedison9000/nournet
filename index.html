@@ -5,21 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نور نت - طلب اشتراك جديد</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; padding: 20px; direction: rtl; text-align: right; }
-        .container { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h2 { color: #333; text-align: center; }
+        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; padding: 20px; direction: rtl; text-align: right; margin: 0; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #0070f3; text-align: center; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 14px; }
         .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; color: #555; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #0070f3; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        label { display: block; margin-bottom: 5px; color: #333; font-weight: bold; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        button { background-color: #0070f3; color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; transition: background 0.3s; }
         button:hover { background-color: #0051cc; }
-        #status { margin-top: 15px; text-align: center; font-weight: bold; }
+        #status { margin-top: 15px; text-align: center; font-weight: bold; font-size: 14px; }
+        .packages-info { background: #eef4ff; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 13px; color: #004085; line-height: 1.6; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>طلب اشتراك في شبكة نور نت</h2>
+    <h2>شبكة نور نت</h2>
+    <p class="subtitle">اختر الباقة المناسبة لك واطلب اشتراكك بكل سهولة</p>
+
+    <div class="packages-info">
+        <b>💡 باقات الإنترنت المتوفرة لدينا:</b>
+        <ul style="margin: 5px 0 0 0; padding-right: 20px;">
+            <li>الباقات الاقتصادية والعادية (حتى 4MB، 16MB، 24MB، إلخ...)</li>
+            <li>الباقات السريعة والعالية (حتى 32MB، 48MB، 54MB، 80MB)</li>
+            <li>باقات الجيمنج (Gaming) والخطوط المخصصة (Dedicated)</li>
+        </ul>
+    </div>
     
     <form id="telegramForm" onsubmit="sendToTelegram(event)">
         <div class="form-group">
@@ -33,20 +45,32 @@
         </div>
 
         <div class="form-group">
-            <label for="location">المنطقة / العنوان:</label>
-            <input type="text" id="location" required placeholder="البقاع - اسم المنطقة بالتحديد">
+            <label for="location">المنطقة / العنوان (البقاع):</label>
+            <input type="text" id="location" required placeholder="اسم المنطقة بالتحديد">
         </div>
 
         <div class="form-group">
-            <label for="package">الباقة المطلوبة:</label>
+            <label for="package">اختر الباقة المطلوبة:</label>
             <select id="package">
-                <option value="باقة الأفراد العادية">باقة الأفراد العادية</option>
-                <option value="الباقة السريعة">الباقة السريعة</option>
-                <option value="الباقة المفتوحة">الباقة المفتوحة</option>
+                <optgroup label="الباقات العادية والمشتركة">
+                    <option value="Up to 4MB 300GB+FN (12 USD)">Up to 4MB 300GB + FN — 12 USD</option>
+                    <option value="Up to 16MB 550GB+FN (15 USD)">Up to 16MB 550GB + FN — 15 USD</option>
+                    <option value="Up to 24MB 660GB+FN (18 USD)" selected>Up to 24MB 660GB + FN — 18 USD</option>
+                    <option value="Up to 32MB 770GB+FN (22 USD)">Up to 32MB 770GB + FN — 22 USD</option>
+                    <option value="Up to 48MB 880GB+FN (26 USD)">Up to 48MB 880GB + FN — 26 USD</option>
+                    <option value="Up to 54MB 990GB+FN (32 USD)">Up to 54MB 990GB + FN — 32 USD</option>
+                    <option value="Up to 80MB 1.1TB+FN (36 USD)">Up to 80MB 1.1TB + FN — 36 USD</option>
+                </optgroup>
+                <optgroup label="باقات مخصصة والجيمنج">
+                    <option value="Gaming (46 USD)">Gaming — 46 USD</option>
+                    <option value="4M-Dedicated (120 USD)">4M-Dedicated — 120 USD</option>
+                    <option value="6M-Dedicated (180 USD)">6M-Dedicated — 180 USD</option>
+                    <option value="8M-Dedicated (240 USD)">8M-Dedicated — 240 USD</option>
+                </optgroup>
             </select>
         </div>
 
-        <button type="submit" id="submitBtn">إرسال الطلب</button>
+        <button type="submit" id="submitBtn">إرسال طلب الاشتراّك</button>
         <p id="status"></p>
     </form>
 </div>
@@ -64,7 +88,7 @@ async function sendToTelegram(event) {
     const pkg = document.getElementById('package').value;
 
     submitBtn.disabled = true;
-    submitBtn.innerText = "جاري الإرسال...";
+    submitBtn.innerText = "جاري إرسال الطلب...";
     status.style.color = "#555";
     status.innerText = "";
 
@@ -91,7 +115,7 @@ async function sendToTelegram(event) {
     }
 
     submitBtn.disabled = false;
-    submitBtn.innerText = "إرسال الطلب";
+    submitBtn.innerText = "إرسال طلب الاشتراّك";
 }
 </script>
 
