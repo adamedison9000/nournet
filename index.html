@@ -171,6 +171,14 @@
         </div>
 
         <div class="form-group">
+            <label for="connectionType">Connection Type</label>
+            <select id="connectionType" required>
+                <option value="Fiber">Fiber Optics</option>
+                <option value="Wireless">Wireless</option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label for="location">Location / Area</label>
             <div class="location-wrapper">
                 <input type="text" id="location" required placeholder="Enter area or get GPS">
@@ -213,7 +221,6 @@ function getLocation() {
             (position) => {
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
-                // يضع رابط خرائط جوجل المباشر في حقل العنوان
                 locInput.value = `https://maps.google.com/?q=${lat},${lon}`;
             },
             (error) => {
@@ -234,6 +241,7 @@ async function sendToTelegram(event) {
     
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
+    const connectionType = document.getElementById('connectionType').value;
     const location = document.getElementById('location').value;
     const pkg = document.getElementById('package').value;
 
@@ -246,7 +254,12 @@ async function sendToTelegram(event) {
         const response = await fetch('/api/send-telegram', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, phone, location, package: pkg })
+            body: JSON.stringify({ 
+                name, 
+                phone, 
+                location: `${location} (Type: ${connectionType})`, 
+                package: pkg 
+            })
         });
 
         const result = await response.json();
