@@ -13,6 +13,7 @@
         input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         button { background-color: #0070f3; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
         button:hover { background-color: #0051cc; }
+        #status { margin-top: 15px; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -20,34 +21,79 @@
 <div class="container">
     <h2>طلب اشتراك في شبكة نور نت</h2>
     
-    <form action="https://formspree.io/f/maeywykr" method="POST">
+    <form id="telegramForm" onsubmit="sendToTelegram(event)">
         <div class="form-group">
             <label for="name">الاسم الكامل:</label>
-            <input type="text" id="name" name="name" required placeholder="أدخل اسمك الكريم">
+            <input type="text" id="name" required placeholder="أدخل اسمك الكريم">
         </div>
         
         <div class="form-group">
             <label for="phone">رقم الهاتف (واتساب):</label>
-            <input type="tel" id="phone" name="phone" required placeholder="03xxxxxx أو 70xxxxxx">
+            <input type="tel" id="phone" required placeholder="03xxxxxx أو 70xxxxxx">
         </div>
 
         <div class="form-group">
             <label for="location">المنطقة / العنوان:</label>
-            <input type="text" id="location" name="location" required placeholder="البقاع - اسم المنطقة بالتحديد">
+            <input type="text" id="location" required placeholder="البقاع - اسم المنطقة بالتحديد">
         </div>
 
         <div class="form-group">
             <label for="package">الباقة المطلوبة:</label>
-            <select id="package" name="package">
+            <select id="package">
                 <option value="باقة الأفراد العادية">باقة الأفراد العادية</option>
                 <option value="الباقة السريعة">الباقة السريعة</option>
                 <option value="الباقة المفتوحة">الباقة المفتوحة</option>
             </select>
         </div>
 
-        <button type="submit">إرسال الطلب</button>
+        <button type="submit" id="submitBtn">إرسال الطلب</button>
+        <p id="status"></p>
     </form>
 </div>
+
+<script>
+async function sendToTelegram(event) {
+    event.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const status = document.getElementById('status');
+    
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const location = document.getElementById('location').value;
+    const pkg = document.getElementById('package').value;
+
+    submitBtn.disabled = true;
+    submitBtn.innerText = "جاري الإرسال...";
+    status.style.color = "#555";
+    status.innerText = "";
+
+    try {
+        const response = await fetch('/api/send-telegram', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, phone, location, package: pkg })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            status.style.color = "green";
+            status.innerText = "تم إرسال طلبك بنجاح! سنتواصل معك قريباً.";
+            document.getElementById('telegramForm').reset();
+        } else {
+            status.style.color = "red";
+            status.innerText = "حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.";
+        }
+    } catch (error) {
+        status.style.color = "red";
+        status.innerText = "تعذر الاتصال بالخادم، تأكد من اتصالك بالإنترنت.";
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.innerText = "إرسال الطلب";
+}
+</script>
 
 </body>
 </html>
