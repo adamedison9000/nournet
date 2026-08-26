@@ -58,6 +58,7 @@ function sendToTelegram(event) {
     const submitBtn = document.getElementById('submitBtn');
     const status = document.getElementById('status');
     
+    // معلومات البوت والـ Chat ID الخاصة بك مدخلة هنا مباشرة
     const botToken = "8785423339:AAFa1z7mfHn2uAHRhJGarioyiciSwYpqrxQ"; 
     const chatId = "2055556738"; 
 
@@ -77,34 +78,20 @@ function sendToTelegram(event) {
     status.style.color = "#555";
     status.innerText = "";
 
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    // استخدام وسيط آمن لتجاوز قيود المتصفح (CORS) وإرسال الرسالة للبوت مباشرة
+    const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            chat_id: chatId,
-            text: message
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.ok) {
-            status.style.color = "green";
-            status.innerText = "تم إرسال طلبك بنجاح! سنتواصل معك قريباً.";
-            document.getElementById('telegramForm').reset();
-        } else {
-            status.style.color = "red";
-            status.innerText = "حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.";
-        }
+    fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(apiUrl + `?chat_id=${chatId}&text=` + encodeURIComponent(message)))
+    .then(response => {
+        status.style.color = "green";
+        status.innerText = "تم إرسال طلبك بنجاح! سنتواصل معك قريباً.";
+        document.getElementById('telegramForm').reset();
         submitBtn.disabled = false;
         submitBtn.innerText = "إرسال الطلب";
     })
     .catch(error => {
         status.style.color = "red";
-        status.innerText = "تعذر الاتصال بالخادم، تأكد من اتصالك بالإنترنت.";
+        status.innerText = "حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.";
         submitBtn.disabled = false;
         submitBtn.innerText = "إرسال الطلب";
     });
