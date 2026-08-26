@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOURNET - طلب اشتراك جديد</title>
+    <title>NOURNET - New Subscription Request</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; padding: 20px; direction: rtl; text-align: right; margin: 0; }
+        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; padding: 20px; direction: ltr; text-align: left; margin: 0; }
         .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { color: #0070f3; text-align: center; margin-bottom: 5px; }
         p.subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 14px; }
@@ -22,53 +22,53 @@
 
 <div class="container">
     <h2>NOURNET</h2>
-    <p class="subtitle">اختر الباقة المناسبة لك واطلب اشتراكك بكل سهولة</p>
+    <p class="subtitle">Choose your preferred package and submit your subscription request easily</p>
 
     <div class="packages-info">
-        <b>💡 باقات الإنترنت المتوفرة لدينا:</b>
-        <ul style="margin: 5px 0 0 0; padding-right: 20px;">
-            <li>جميع السرعات والباقات المتوفرة مع الأسعار المحدثة</li>
+        <b>💡 Available Internet Packages:</b>
+        <ul style="margin: 5px 0 0 0; padding-left: 20px;">
+            <li>All speeds and updated prices included</li>
         </ul>
     </div>
     
     <form id="telegramForm" onsubmit="sendToTelegram(event)">
         <div class="form-group">
-            <label for="name">الاسم الكامل:</label>
-            <input type="text" id="name" required placeholder="أدخل اسمك الكريم">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" required placeholder="Enter your full name">
         </div>
         
         <div class="form-group">
-            <label for="phone">رقم الهاتف (واتساب):</label>
-            <input type="tel" id="phone" required placeholder="03xxxxxx أو 70xxxxxx">
+            <label for="phone">Phone Number (WhatsApp):</label>
+            <input type="tel" id="phone" required placeholder="03xxxxxx or 70xxxxxx">
         </div>
 
         <div class="form-group">
-            <label for="location">المنطقة / العنوان (البقاع):</label>
-            <input type="text" id="location" required placeholder="اسم المنطقة بالتحديد">
+            <label for="location">Location / Area:</label>
+            <input type="text" id="location" required placeholder="Enter your exact area">
         </div>
 
         <div class="form-group">
-            <label for="package">اختر الباقة المطلوبة:</label>
+            <label for="package">Select Package:</label>
             <select id="package">
-                <optgroup label="الباقات العادية والمشتركة">
+                <optgroup label="Standard & Shared Packages">
                     <option value="Up to 4MB 300GB+FN (25 USD)">Up to 4MB 300GB + FN — 25 USD</option>
                     <option value="Up to 16MB 550GB+FN (30 USD)">Up to 16MB 550GB + FN — 30 USD</option>
                     <option value="Up to 24MB 660GB+FN (35 USD)" selected>Up to 24MB 660GB + FN — 35 USD</option>
                     <option value="Up to 32MB 770GB+FN (40 USD)">Up to 32MB 770GB + FN — 40 USD</option>
                     <option value="Up to 48MB 880GB+FN (45 USD)">Up to 48MB 880GB + FN — 45 USD</option>
                     <option value="Up to 54MB 990GB+FN (50 USD)">Up to 54MB 990GB + FN — 50 USD</option>
-                    <option value="Up to 80MB 1.1TB+FN (100 USD)">Up to 80MB 1.1TB + FN — 100 USD</option>
+                    <option value="Up to 80MB 1.1TB+FN (85 USD)">Up to 80MB 1.1TB + FN — 85 USD</option>
                 </optgroup>
-                <optgroup label="باقات مخصصة والجيمنج">
-                    <option value="Gaming (75 USD)">Gaming — 75 USD</option>
-                    <option value="4M-Dedicated (150 USD)">4M-Dedicated — 150 USD</option>
-                    <option value="6M-Dedicated (230 USD)">6M-Dedicated — 230 USD</option>
-                    <option value="8M-Dedicated (330 USD)">8M-Dedicated — 330 USD</option>
+                <optgroup label="Gaming & Dedicated Packages">
+                    <option value="Gaming (65 USD)">Gaming — 65 USD</option>
+                    <option value="4M-Dedicated (125 USD)">4M-Dedicated — 125 USD</option>
+                    <option value="6M-Dedicated (185 USD)">6M-Dedicated — 185 USD</option>
+                    <option value="8M-Dedicated (245 USD)">8M-Dedicated — 245 USD</option>
                 </optgroup>
             </select>
         </div>
 
-        <button type="submit" id="submitBtn">إرسال طلب الاشتراّك</button>
+        <button type="submit" id="submitBtn">Submit Request</button>
         <p id="status"></p>
     </form>
 </div>
@@ -86,7 +86,7 @@ async function sendToTelegram(event) {
     const pkg = document.getElementById('package').value;
 
     submitBtn.disabled = true;
-    submitBtn.innerText = "جاري إرسال الطلب...";
+    submitBtn.innerText = "Sending...";
     status.style.color = "#555";
     status.innerText = "";
 
@@ -101,19 +101,19 @@ async function sendToTelegram(event) {
 
         if (response.ok && result.success) {
             status.style.color = "green";
-            status.innerText = "تم إرسال طلبك بنجاح! سنتواصل معك قريباً.";
+            status.innerText = "Request sent successfully! We will contact you soon.";
             document.getElementById('telegramForm').reset();
         } else {
             status.style.color = "red";
-            status.innerText = "حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.";
+            status.innerText = "An error occurred, please try again later.";
         }
     } catch (error) {
         status.style.color = "red";
-        status.innerText = "تعذر الاتصال بالخادم، تأكد من اتصالك بالإنترنت.";
+        status.innerText = "Connection error, please check your internet.";
     }
 
     submitBtn.disabled = false;
-    submitBtn.innerText = "إرسال طلب الاشتراّك";
+    submitBtn.innerText = "Submit Request";
 }
 </script>
 
