@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOURNET | High-Speed Internet Subscription</title>
+    <title>NOURNET | High-Speed Internet & Smart Solutions</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -19,7 +19,7 @@
             color: #f8fafc;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             margin: 0;
             padding: 20px;
@@ -35,6 +35,7 @@
             padding: 35px;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            margin-bottom: 25px;
         }
 
         .brand-header {
@@ -122,6 +123,61 @@
             color: #fff;
         }
 
+        /* Smart Calculator Box */
+        .smart-calc {
+            background: rgba(79, 70, 229, 0.1);
+            border: 1px dashed rgba(129, 140, 248, 0.4);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .smart-calc h3 {
+            font-size: 14px;
+            color: #818cf8;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* FAQ Section Style */
+        .faq-section {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            padding: 25px 35px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .faq-section h2 {
+            font-size: 18px;
+            color: #818cf8;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .faq-item {
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 4px;
+        }
+
+        .faq-answer {
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
         button[type="submit"] {
             width: 100%;
             padding: 15px;
@@ -186,6 +242,20 @@
             </div>
         </div>
 
+        <!-- Smart Plan Recommender (Calculator) -->
+        <div class="smart-calc">
+            <h3>⚡ Smart Plan Recommender</h3>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="usageType" style="font-size: 11px;">Primary Household Use:</label>
+                <select id="usageType" onchange="recommendPlan()">
+                    <option value="light">Light Browsing & Social Media (1-3 Devices)</option>
+                    <option value="family" selected>Family & 4K Streaming (4-8 Devices)</option>
+                    <option value="gaming">Pro Gaming & Heavy Download (Low Ping)</option>
+                </select>
+            </div>
+            <p id="recommendationText" style="font-size: 12px; color: #a5b4fc; margin: 5px 0 0 0;"></p>
+        </div>
+
         <div class="form-group">
             <label for="package">Choose Package</label>
             <select id="package">
@@ -212,7 +282,50 @@
     </form>
 </div>
 
+<!-- FAQ & Self-Service Section -->
+<div class="faq-section">
+    <h2>💡 Help Center & FAQ</h2>
+    
+    <div class="faq-item">
+        <div class="faq-question">Q: How long does the installation take?</div>
+        <div class="faq-answer">Normally within 24 to 48 hours after submitting your request and verifying coverage.</div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">Q: What should I do if my connection drops?</div>
+        <div class="faq-answer">Try restarting your router/power unit. If the issue persists, contact us directly via WhatsApp.</div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">Q: Can I upgrade my package later?</div>
+        <div class="faq-answer">Yes, you can upgrade your speed or quota at any time by contacting support.</div>
+    </div>
+</div>
+
 <script>
+// Smart Recommender Logic
+function recommendPlan() {
+    const usage = document.getElementById('usageType').value;
+    const pkgSelect = document.getElementById('package');
+    const recText = document.getElementById('recommendationText');
+
+    if (usage === 'light') {
+        pkgSelect.value = "Up to 16MB 550GB+FN (30 USD)";
+        recText.innerText = "💡 Recommended: Up to 16MB (Best value for basic usage)";
+    } else if (usage === 'family') {
+        pkgSelect.value = "Up to 24MB 660GB+FN (35 USD)";
+        recText.innerText = "💡 Recommended: Up to 24MB (Great for streaming & multiple devices)";
+    } else if (usage === 'gaming') {
+        pkgSelect.value = "Gaming (65 USD)";
+        recText.innerText = "💡 Recommended: Gaming Package (Optimized low-latency for gamers)";
+    }
+}
+
+// Run once on load
+window.onload = function() {
+    recommendPlan();
+};
+
 function getLocation() {
     const locInput = document.getElementById('location');
     if (navigator.geolocation) {
@@ -268,6 +381,7 @@ async function sendToTelegram(event) {
             status.style.color = "#34d399";
             status.innerText = "✨ Request sent successfully! We will contact you soon.";
             document.getElementById('telegramForm').reset();
+            recommendPlan();
         } else {
             status.style.color = "#f87171";
             status.innerText = "❌ An error occurred, please try again later.";
