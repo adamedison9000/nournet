@@ -86,15 +86,15 @@
             margin: 0;
         }
 
-        /* Navigation Buttons */
+        /* Navigation Buttons Container */
         .nav-buttons-container {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-bottom: 20px;
         }
 
         .nav-link-btn {
-            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -119,7 +119,19 @@
             transform: translateY(-2px);
         }
 
+        .btn-map {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .btn-map:hover {
+            background: rgba(245, 158, 11, 0.3);
+            transform: translateY(-2px);
+        }
+
         .btn-portal {
+            grid-column: span 2;
             background: rgba(6, 182, 212, 0.15);
             color: #38bdf8;
             border-color: rgba(56, 189, 248, 0.3);
@@ -290,13 +302,16 @@
         <p id="brandSub">Select your package & connect instantly</p>
     </div>
 
-    <!-- أزرار الانقال للصفحات المنفصلة -->
+    <!-- أزرار التنقل للصفحات الفرعية -->
     <div class="nav-buttons-container">
         <a href="speedtest.html" class="nav-link-btn btn-speed" id="navSpeed">
-            ⚡ Speed Test / فحص السرعة
+            ⚡ Speed Test
+        </a>
+        <a href="coverage.html" class="nav-link-btn btn-map" id="navMap">
+            🗺️ Coverage Map
         </a>
         <a href="https://user.netprolb.com/user.php" target="_blank" rel="noopener noreferrer" class="nav-link-btn btn-portal" id="navPortal">
-            👤 Subscription / تفاصيل الاشتراك
+            👤 Subscription Details
         </a>
     </div>
     
@@ -400,6 +415,7 @@ const translations = {
         pageTitle: 'NOURNET | High-Speed Internet & Smart Solutions',
         brandSub: 'Select your package & connect instantly',
         navSpeed: '⚡ Speed Test',
+        navMap: '🗺️ Fiber Coverage',
         navPortal: '👤 Subscription Details',
         labelName: 'Full Name',
         placeholderName: 'Enter your full name',
@@ -441,6 +457,7 @@ const translations = {
         pageTitle: 'نورنت | إنترنت عالي السرعة وحلول ذكية',
         brandSub: 'اختر باقتك واتصل فوراً',
         navSpeed: '⚡ فحص السرعة',
+        navMap: '🗺️ خريطة التغطية',
         navPortal: '👤 تفاصيل الاشتراك',
         labelName: 'الاسم الكامل',
         placeholderName: 'أدخل اسمك الكامل',
@@ -494,6 +511,7 @@ function applyLanguage() {
     document.getElementById('pageTitle').innerText = t.pageTitle;
     document.getElementById('brandSub').innerText = t.brandSub;
     document.getElementById('navSpeed').innerText = t.navSpeed;
+    document.getElementById('navMap').innerText = t.navMap;
     document.getElementById('navPortal').innerText = t.navPortal;
     document.getElementById('labelName').innerText = t.labelName;
     document.getElementById('name').placeholder = t.placeholderName;
