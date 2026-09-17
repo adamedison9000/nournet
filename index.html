@@ -399,9 +399,9 @@
     </div>
 </div>
 
-<!-- عدّاد الزوار الفوري المباشر -->
+<!-- عدّاد الزوار الطبيعي (يبدأ من 0 ويتزايد تباعاً) -->
 <div style="text-align: center; margin-bottom: 90px; font-size: 14px; color: #94a3b8; font-family: sans-serif;">
-    👁️ إجمالي زوار الموقع: <span id="liveVisitorCount" style="color: #38bdf8; font-weight: bold; font-size: 16px;">جارِ التحميل...</span>
+    👁️ إجمالي زوار الموقع: <span id="liveVisitorCount" style="color: #38bdf8; font-weight: bold; font-size: 16px;">0</span>
 </div>
 
 <!-- زر واتساب العائم -->
@@ -411,20 +411,19 @@
 </a>
 
 <script>
-// تشغيل عداد الزوار الفوري
+// عداد زوار طبيعي يبدأ من الصفر (0, 1, 2...)
 (function() {
-    const counterKey = 'nournet_site_visits';
+    const counterKey = 'nournet_natural_visits';
     let visits = localStorage.getItem(counterKey);
     
-    if (!visits) {
-        visits = 0; 
+    if (visits === null) {
+        visits = 1; // أول زيارة تبدأ بـ 1
     } else {
-        visits = parseInt(visits) + 1;
+        visits = parseInt(visits) + 1; // تزيد مع كل زيارة طبيعية
     }
     
     localStorage.setItem(counterKey, visits);
     
-    // الانتظار حتى تحميل العنصر ثم عرض الرقم
     window.addEventListener('DOMContentLoaded', () => {
         const countSpan = document.getElementById('liveVisitorCount');
         if (countSpan) {
