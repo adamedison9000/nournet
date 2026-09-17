@@ -310,7 +310,6 @@
         <a href="coverage.html" class="nav-link-btn btn-map" id="navMap">
             🗺️ Coverage Map
         </a>
-        <!-- زر التوجيه الذكي المعتمد على كشف اسم المزود -->
         <a onclick="autoRedirectPortal(event)" class="nav-link-btn btn-portal" id="navPortal">
             👤 Subscription Details
         </a>
@@ -408,28 +407,26 @@
 
 <script>
 // ==========================================
-// 📍 دالة التوجيه الذكي عبر كشف اسم الـ ISP
+// 📍 التوجيه الذكي باستخدام HTTPS
 // ==========================================
 async function autoRedirectPortal(e) {
     if (e) e.preventDefault();
     const portalBtn = document.getElementById('navPortal');
     const oldText = portalBtn.innerText;
     
-    portalBtn.innerText = currentLang === 'ar' ? "⏳ جاري التوجيه تلقائياً..." : "⏳ Detecting Provider...";
+    portalBtn.innerText = currentLang === 'ar' ? "⏳ جاري التعرف على الشبكة..." : "⏳ Detecting Provider...";
 
     try {
-        const response = await fetch('http://ip-api.com/json');
+        const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
 
-        // تجميع معلومات المزود للبحث المباشر
-        const ispInfo = (data.isp + " " + data.as + " " + data.org).toLowerCase();
+        const ispInfo = ((data.org || "") + " " + (data.asn || "") + " " + (data.network || "")).toLowerCase();
 
-        if (ispInfo.includes("net pro") || ispInfo.includes("netpro")) {
+        if (ispInfo.includes("net pro") || ispInfo.includes("netpro") || ispInfo.includes("as48206")) {
             window.location.href = "https://user.netprolb.com/user.php";
         } else if (ispInfo.includes("terra") || ispInfo.includes("terranet")) {
             window.location.href = "https://acppro.terra.net.lb/login";
         } else {
-            // فتح صفحة الاختيار إذا كان الاتصال عبر 4G أو مزود مختلف
             window.location.href = "portal.html";
         }
     } catch (error) {
