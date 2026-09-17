@@ -67,7 +67,7 @@
 
         .brand-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .brand-header h1 {
@@ -86,40 +86,48 @@
             margin: 0;
         }
 
-        /* Account Details Link Card */
-        .portal-card {
-            background: rgba(99, 102, 241, 0.15);
-            border: 1px solid rgba(129, 140, 248, 0.3);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 25px;
-            text-align: center;
+        /* Navigation Buttons */
+        .nav-buttons-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        .portal-card p {
-            margin: 0 0 10px 0;
-            font-size: 13px;
-            color: #cbd5e1;
-        }
-
-        .portal-btn {
-            display: inline-block;
-            width: 100%;
-            box-sizing: border-box;
-            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-            color: #ffffff;
+        .nav-link-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 12px;
             border-radius: 10px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
+            text-align: center;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+            border: 1px solid var(--border-color);
         }
 
-        .portal-btn:hover {
+        .btn-speed {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border-color: rgba(52, 211, 153, 0.3);
+        }
+
+        .btn-speed:hover {
+            background: rgba(16, 185, 129, 0.3);
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(6, 182, 212, 0.5);
+        }
+
+        .btn-portal {
+            background: rgba(6, 182, 212, 0.15);
+            color: #38bdf8;
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-portal:hover {
+            background: rgba(6, 182, 212, 0.3);
+            transform: translateY(-2px);
         }
 
         .form-group {
@@ -203,20 +211,6 @@
             gap: 6px;
         }
 
-        .speedtest-container {
-            width: 100%;
-            max-width: 520px;
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            margin-bottom: 25px;
-            box-sizing: border-box;
-            text-align: center;
-        }
-
         .faq-section {
             width: 100%;
             max-width: 520px;
@@ -277,7 +271,7 @@
         }
 
         #status {
-            margin-top: 20px;
+            margin-top: 15px;
             text-align: center;
             font-weight: 600;
             font-size: 14px;
@@ -296,11 +290,13 @@
         <p id="brandSub">Select your package & connect instantly</p>
     </div>
 
-    <!-- قسم الانتقال إلى بوابة اشتراك المشترك -->
-    <div class="portal-card">
-        <p id="portalText">Already a subscriber? Check your account details & expiration date:</p>
-        <a href="https://user.netprolb.com/user.php" target="_blank" rel="noopener noreferrer" class="portal-btn" id="portalBtn">
-            👤 View Subscription Details / تفاصيل الاشتراك
+    <!-- أزرار الانقال للصفحات المنفصلة -->
+    <div class="nav-buttons-container">
+        <a href="speedtest.html" class="nav-link-btn btn-speed" id="navSpeed">
+            ⚡ Speed Test / فحص السرعة
+        </a>
+        <a href="https://user.netprolb.com/user.php" target="_blank" rel="noopener noreferrer" class="nav-link-btn btn-portal" id="navPortal">
+            👤 Subscription / تفاصيل الاشتراك
         </a>
     </div>
     
@@ -370,15 +366,6 @@
     </form>
 </div>
 
-<!-- Speedtest Section -->
-<div class="speedtest-container">
-    <h2 id="speedTitle" style="font-size: 18px; color: #818cf8; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">⚡ Speed Test / فحص السرعة</h2>
-    <div style="position: relative; width: 100%; height: 500px; overflow: hidden; border-radius: 12px; background: rgba(0,0,0,0.2);">
-        <iframe src="https://openspeedtest.com/speedtest" style="width: 100%; height: 100%; border: none;" title="SpeedTest Widget" loading="lazy" allow="autoplay"></iframe>
-    </div>
-</div>
-
-<!-- FAQ Section -->
 <div class="faq-section">
     <h2 id="faqHeader">💡 Help Center & FAQ</h2>
     
@@ -398,11 +385,8 @@
     </div>
 </div>
 
-<!-- Floating WhatsApp Button -->
 <a href="https://wa.me/96171585414" target="_blank" rel="noopener noreferrer" style="position: fixed; bottom: 20px; right: 20px; background-color: #25d366; color: #ffffff; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px; z-index: 99999; font-family: sans-serif;">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.09-.39-.12-.56.12-.17.25-.66.8-.81.97-.15.17-.3.19-.55.07-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.43s-.56-1.35-.77-1.85c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.28 3.79.6.26 1.07.41 1.43.53.6.19 1.15.16 1.59.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/>
-  </svg>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.09-.39-.12-.56.12-.17.25-.66.8-.81.97-.15.17-.3.19-.55.07-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.43s-.56-1.35-.77-1.85c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.28 3.79.6.26 1.07.41 1.43.53.6.19 1.15.16 1.59.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/></svg>
   <span>تواصل معنا مباشرة</span>
 </a>
 
@@ -415,8 +399,8 @@ const translations = {
         langBtn: 'العربية 🇱🇧',
         pageTitle: 'NOURNET | High-Speed Internet & Smart Solutions',
         brandSub: 'Select your package & connect instantly',
-        portalText: 'Already a subscriber? Check your account details & expiration date:',
-        portalBtn: '👤 View Subscription Details',
+        navSpeed: '⚡ Speed Test',
+        navPortal: '👤 Subscription Details',
         labelName: 'Full Name',
         placeholderName: 'Enter your full name',
         labelPhone: 'Phone Number (WhatsApp)',
@@ -456,8 +440,8 @@ const translations = {
         langBtn: 'English 🇺🇸',
         pageTitle: 'نورنت | إنترنت عالي السرعة وحلول ذكية',
         brandSub: 'اختر باقتك واتصل فوراً',
-        portalText: 'مشترك حالي؟ تحقق من تفاصيل حسابك وتاريخ انتهاء الاشتراك:',
-        portalBtn: '👤 عرض تفاصيل الاشتراك',
+        navSpeed: '⚡ فحص السرعة',
+        navPortal: '👤 تفاصيل الاشتراك',
         labelName: 'الاسم الكامل',
         placeholderName: 'أدخل اسمك الكامل',
         labelPhone: 'رقم الهاتف (واتساب)',
@@ -509,8 +493,8 @@ function applyLanguage() {
     document.getElementById('langToggleBtn').innerText = t.langBtn;
     document.getElementById('pageTitle').innerText = t.pageTitle;
     document.getElementById('brandSub').innerText = t.brandSub;
-    document.getElementById('portalText').innerText = t.portalText;
-    document.getElementById('portalBtn').innerText = t.portalBtn;
+    document.getElementById('navSpeed').innerText = t.navSpeed;
+    document.getElementById('navPortal').innerText = t.navPortal;
     document.getElementById('labelName').innerText = t.labelName;
     document.getElementById('name').placeholder = t.placeholderName;
     document.getElementById('labelPhone').innerText = t.labelPhone;
