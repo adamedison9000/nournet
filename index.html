@@ -310,7 +310,7 @@
         <a href="coverage.html" class="nav-link-btn btn-map" id="navMap">
             🗺️ Coverage Map
         </a>
-        <!-- زر التوجيه الذكي لحساب الزبون -->
+        <!-- زر التوجيه الذكي المعتمد على كشف اسم المزود -->
         <a onclick="autoRedirectPortal(event)" class="nav-link-btn btn-portal" id="navPortal">
             👤 Subscription Details
         </a>
@@ -408,51 +408,35 @@
 
 <script>
 // ==========================================
-// 📍 نطاقات الـ IP للشركتين:
+// 📍 دالة التوجيه الذكي عبر كشف اسم الـ ISP
 // ==========================================
-const NETPRO_PREFIX = "100.112.";
-const TERRANET_PREFIX = "100.104.220.";
-
-function autoRedirectPortal(e) {
+async function autoRedirectPortal(e) {
     if (e) e.preventDefault();
     const portalBtn = document.getElementById('navPortal');
     const oldText = portalBtn.innerText;
-    portalBtn.innerText = currentLang === 'ar' ? "⏳ جاري التحقق..." : "⏳ Checking Network...";
+    
+    portalBtn.innerText = currentLang === 'ar' ? "⏳ جاري التوجيه تلقائياً..." : "⏳ Detecting Provider...";
 
-    let redirected = false;
+    try {
+        const response = await fetch('http://ip-api.com/json');
+        const data = await response.json();
 
-    // جلب الـ IP الداخلي للمشترك عبر WebRTC
-    const pc = new RTCPeerConnection({ iceServers: [] });
-    pc.createDataChannel('');
-    pc.createOffer().then(offer => pc.setLocalDescription(offer)).catch(() => {});
+        // تجميع معلومات المزود للبحث المباشر
+        const ispInfo = (data.isp + " " + data.as + " " + data.org).toLowerCase();
 
-    pc.onicecandidate = (event) => {
-        if (!event || !event.candidate || redirected) return;
-        
-        const candidateStr = event.candidate.candidate;
-        const ipMatch = candidateStr.match(/([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/);
-        
-        if (ipMatch) {
-            const clientIp = ipMatch[1];
-            redirected = true;
-            pc.close();
-
-            if (clientIp.startsWith(NETPRO_PREFIX)) {
-                window.location.href = "https://user.netprolb.com/user.php";
-            } else if (clientIp.startsWith(TERRANET_PREFIX)) {
-                window.location.href = "https://acppro.terra.net.lb/login";
-            } else {
-                window.location.href = "portal.html";
-            }
-        }
-    };
-
-    // خطة احتياطية خلال ثانية واحدة في حال كان الزبون يفتح عبر 4G أو متصفحه يمنع WebRTC
-    setTimeout(() => {
-        if (!redirected) {
+        if (ispInfo.includes("net pro") || ispInfo.includes("netpro")) {
+            window.location.href = "https://user.netprolb.com/user.php";
+        } else if (ispInfo.includes("terra") || ispInfo.includes("terranet")) {
+            window.location.href = "https://acppro.terra.net.lb/login";
+        } else {
+            // فتح صفحة الاختيار إذا كان الاتصال عبر 4G أو مزود مختلف
             window.location.href = "portal.html";
         }
-    }, 1200);
+    } catch (error) {
+        window.location.href = "portal.html";
+    } finally {
+        portalBtn.innerText = oldText;
+    }
 }
 
 let currentLang = 'en';
