@@ -408,35 +408,51 @@
 
 <script>
 // ==========================================
-// 📍 أضف نطاقات الـ IP الخاصة بشركاتك هنا:
+// 📍 نطاقات الـ IP للشركتين:
 // ==========================================
-const NETPRO_IP_PREFIX = "100.112.";  // عدل هذا الرقم ببادئة IP شركة NetPro
-const TERRANET_IP_PREFIX = "100.104.220."; // عدل هذا الرقم ببادئة IP شركة TerraNet
+const NETPRO_PREFIX = "100.112.";
+const TERRANET_PREFIX = "100.104.220.";
 
-async function autoRedirectPortal(e) {
+function autoRedirectPortal(e) {
     if (e) e.preventDefault();
     const portalBtn = document.getElementById('navPortal');
     const oldText = portalBtn.innerText;
-    portalBtn.innerText = "⏳ Checking IP / جاري التحقق...";
+    portalBtn.innerText = currentLang === 'ar' ? "⏳ جاري التحقق..." : "⏳ Checking Network...";
 
-    try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const data = await res.json();
-        const userIp = data.ip;
+    let redirected = false;
 
-        if (userIp.startsWith(NETPRO_IP_PREFIX)) {
-            window.open("https://user.netprolb.com/user.php", "_blank");
-        } else if (userIp.startsWith(TERRANET_IP_PREFIX)) {
-            window.open("https://acppro.terra.net.lb/login", "_blank");
-        } else {
-            // إذا كان الـ IP غير معروف أو الزبون يفتح من 4G فتح صفحة الاختيار
+    // جلب الـ IP الداخلي للمشترك عبر WebRTC
+    const pc = new RTCPeerConnection({ iceServers: [] });
+    pc.createDataChannel('');
+    pc.createOffer().then(offer => pc.setLocalDescription(offer)).catch(() => {});
+
+    pc.onicecandidate = (event) => {
+        if (!event || !event.candidate || redirected) return;
+        
+        const candidateStr = event.candidate.candidate;
+        const ipMatch = candidateStr.match(/([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/);
+        
+        if (ipMatch) {
+            const clientIp = ipMatch[1];
+            redirected = true;
+            pc.close();
+
+            if (clientIp.startsWith(NETPRO_PREFIX)) {
+                window.location.href = "https://user.netprolb.com/user.php";
+            } else if (clientIp.startsWith(TERRANET_PREFIX)) {
+                window.location.href = "https://acppro.terra.net.lb/login";
+            } else {
+                window.location.href = "portal.html";
+            }
+        }
+    };
+
+    // خطة احتياطية خلال ثانية واحدة في حال كان الزبون يفتح عبر 4G أو متصفحه يمنع WebRTC
+    setTimeout(() => {
+        if (!redirected) {
             window.location.href = "portal.html";
         }
-    } catch (err) {
-        window.location.href = "portal.html";
-    } finally {
-        portalBtn.innerText = oldText;
-    }
+    }, 1200);
 }
 
 let currentLang = 'en';
