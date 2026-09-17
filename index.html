@@ -169,6 +169,21 @@
             gap: 6px;
         }
 
+        /* Speedtest Box */
+        .speedtest-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            margin-bottom: 25px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
         /* FAQ Section Style */
         .faq-section {
             width: 100%;
@@ -180,6 +195,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             box-sizing: border-box;
+            margin-bottom: 40px;
         }
 
         .faq-section h2 {
@@ -315,6 +331,14 @@
     </form>
 </div>
 
+<!-- Speedtest Section -->
+<div class="speedtest-container">
+    <h2 id="speedTitle" style="font-size: 18px; color: #818cf8; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">⚡ Speed Test / قياس السرعة</h2>
+    <div style="position: relative; width: 100%; height: 420px; overflow: hidden; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+        <iframe src="https://openspeedtest.com/Get-widget.php?RegexSearch=true" style="width: 100%; height: 100%; border: none;" title="SpeedTest Widget" loading="lazy"></iframe>
+    </div>
+</div>
+
 <!-- FAQ & Self-Service Section -->
 <div class="faq-section">
     <h2 id="faqHeader">💡 Help Center & FAQ</h2>
@@ -334,6 +358,14 @@
         <div class="faq-answer" id="a3">Yes, you can upgrade your speed or quota at any time by contacting support.</div>
     </div>
 </div>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/96171585414" target="_blank" rel="noopener noreferrer" style="position: fixed; bottom: 20px; right: 20px; background-color: #25d366; color: #ffffff; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px; z-index: 99999; font-family: sans-serif;">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.09-.39-.12-.56.12-.17.25-.66.8-.81.97-.15.17-.3.19-.55.07-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.43s-.56-1.35-.77-1.85c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.28 3.79.6.26 1.07.41 1.43.53.6.19 1.15.16 1.59.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/>
+  </svg>
+  <span>تواصل معنا مباشرة</span>
+</a>
 
 <script>
 let currentLang = 'en';
@@ -464,7 +496,6 @@ function applyLanguage() {
     recommendPlan();
 }
 
-// Smart Recommender Logic
 function recommendPlan() {
     const usage = document.getElementById('usageType').value;
     const pkgSelect = document.getElementById('package');
@@ -478,7 +509,7 @@ function recommendPlan() {
             pkgSelect.value = "Up to 24MB 660GB+FN (35 USD)";
             recText.innerText = "💡 موصى به: باقة 24 ميغابايت (ممتازة للبث والعائلة والأجهزة المتعددة)";
         } else if (usage === 'gaming') {
-            pkgSelect.value = "Gaming (65 USD)";
+            pkgSelect.value = "Gaming (75 USD)";
             recText.innerText = "💡 موصى به: باقة الألعاب Gaming (بينغ منخفض ومثالية للاستخدام الكثيف)";
         }
     } else {
@@ -489,13 +520,12 @@ function recommendPlan() {
             pkgSelect.value = "Up to 24MB 660GB+FN (35 USD)";
             recText.innerText = "💡 Recommended: Up to 24MB (Great for streaming & multiple devices)";
         } else if (usage === 'gaming') {
-            pkgSelect.value = "Gaming (65 USD)";
+            pkgSelect.value = "Gaming (75 USD)";
             recText.innerText = "💡 Recommended: Gaming Package (Optimized low-latency for gamers)";
         }
     }
 }
 
-// Run once on load
 window.onload = function() {
     applyLanguage();
 };
@@ -571,12 +601,6 @@ async function sendToTelegram(event) {
     submitBtn.innerText = t.submitBtn;
 }
 </script>
-<!-- زر واتساب عائم بدون أخطاء برمجية -->
-<a href="https://wa.me/96171585414" target="_blank" rel="noopener noreferrer" style="position: fixed; bottom: 20px; right: 20px; background-color: #25d366; color: #ffffff; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px; z-index: 99999; font-family: sans-serif;">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.09-.39-.12-.56.12-.17.25-.66.8-.81.97-.15.17-.3.19-.55.07-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.43s-.56-1.35-.77-1.85c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.28 3.79.6.26 1.07.41 1.43.53.6.19 1.15.16 1.59.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/>
-  </svg>
-  <span>تواصل معنا مباشرة</span>
-</a>
+
 </body>
 </html>
