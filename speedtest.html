@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOURNET | Speed Test - فحص السرعة</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #4f46e5;
+            color: #fff;
+        }
+
+        .speedtest-card {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 22px;
+            color: #818cf8;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .iframe-wrapper {
+            position: relative;
+            width: 100%;
+            height: 520px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="index.html" class="back-btn">⬅ العودة للرئيسية</a>
+    <span style="font-weight: 800; color: #818cf8;">NOURNET</span>
+</div>
+
+<div class="speedtest-card">
+    <h1>⚡ فحص سرعة الإنترنت / Speed Test</h1>
+    <div class="iframe-wrapper">
+        <iframe src="https://openspeedtest.com/speedtest" style="width: 100%; height: 100%; border: none;" title="SpeedTest Widget" loading="lazy" allow="autoplay"></iframe>
+    </div>
+</div>
+
+</body>
+</html>
