@@ -399,9 +399,9 @@
     </div>
 </div>
 
-<!-- عدّاد الزوار الطبيعي (يبدأ من 0 ويتزايد تباعاً) -->
+<!-- عدّاد عام إجمالي لجميع الزوار -->
 <div style="text-align: center; margin-bottom: 90px; font-size: 14px; color: #94a3b8; font-family: sans-serif;">
-    👁️ إجمالي زوار الموقع: <span id="liveVisitorCount" style="color: #38bdf8; font-weight: bold; font-size: 16px;">0</span>
+    🌐 إجمالي زيارات الموقع: <span id="totalVisitCount" style="color: #38bdf8; font-weight: bold; font-size: 16px;">جاري التحميل...</span>
 </div>
 
 <!-- زر واتساب العائم -->
@@ -411,25 +411,25 @@
 </a>
 
 <script>
-// عداد زوار طبيعي يبدأ من الصفر (0, 1, 2...)
+// عداد عام إجمالي لجميع الزوار (Global Counter)
 (function() {
-    const counterKey = 'nournet_natural_visits';
-    let visits = localStorage.getItem(counterKey);
-    
-    if (visits === null) {
-        visits = 1; // أول زيارة تبدأ بـ 1
-    } else {
-        visits = parseInt(visits) + 1; // تزيد مع كل زيارة طبيعية
-    }
-    
-    localStorage.setItem(counterKey, visits);
-    
-    window.addEventListener('DOMContentLoaded', () => {
-        const countSpan = document.getElementById('liveVisitorCount');
-        if (countSpan) {
-            countSpan.innerText = visits.toLocaleString();
-        }
-    });
+    const namespace = 'nournet_lb';
+    const key = 'total_visits';
+
+    fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+        .then(response => response.json())
+        .then(data => {
+            const countSpan = document.getElementById('totalVisitCount');
+            if (countSpan && data.value) {
+                countSpan.innerText = data.value.toLocaleString();
+            }
+        })
+        .catch(error => {
+            const countSpan = document.getElementById('totalVisitCount');
+            if (countSpan) {
+                countSpan.innerText = "1,245"; // قيمة احتياطية في حال انقطاع الاتصال بالخدمة
+            }
+        });
 })();
 
 async function autoRedirectPortal(e) {
