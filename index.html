@@ -298,12 +298,10 @@
 
 <div class="container">
     <div class="brand-header">
-        <!-- العنوان ثابث لا يتغير عند تبديل اللغة -->
         <h1>NOURNET</h1>
         <p id="brandSub">اختر باقتك واتصل فوراً</p>
     </div>
 
-    <!-- أزرار التنقل -->
     <div class="nav-buttons-container">
         <a href="speedtest.html" class="nav-link-btn btn-speed" id="navSpeed">
             ⚡ فحص السرعة
@@ -401,9 +399,9 @@
     </div>
 </div>
 
-<!-- عدّاد الزوار الفوري -->
-<div style="text-align: center; margin-bottom: 90px; font-size: 13px; color: #94a3b8;">
-    👁️ إجمالي زوار الموقع: <span id="siteVisits" style="color: #38bdf8; font-weight: bold;">...</span>
+<!-- عدّاد الزوار الجديد (Flag Counter) -->
+<div style="text-align: center; margin-bottom: 90px;">
+    <a href="https://info.flagcounter.com/Vrq8"><img src="https://s01.flagcounter.com/count2/Vrq8/bg_FFFFFF/txt_000000/border_CCCCCC/" alt="Flag Counter" border="0"></a>
 </div>
 
 <!-- زر واتساب العائم -->
@@ -413,17 +411,6 @@
 </a>
 
 <script>
-// جلب عدّاد الزوار الفوري
-fetch('https://api.countapi.xyz/hit/nournet-official-website-2026/visits')
-  .then(res => res.json())
-  .then(data => {
-      document.getElementById('siteVisits').innerText = data.value;
-  })
-  .catch(() => {
-      document.getElementById('siteVisits').innerText = "1";
-  });
-
-// التوجيه الذكي المعتمد على HTTPS
 async function autoRedirectPortal(e) {
     if (e) e.preventDefault();
     const portalBtn = document.getElementById('navPortal');
