@@ -108,10 +108,6 @@
         const MY_WHATSAPP_NUMBER = "96171585414"; 
         const MY_TELEGRAM_USERNAME = "nournetalibot"; 
 
-        // بيانات بوت تليجرام الخاص بك (ضع الـ Token و Chat ID هنا)
-        const TELEGRAM_BOT_TOKEN = "YOUR_BOT_TOKEN_HERE";
-        const TELEGRAM_CHAT_ID = "YOUR_CHAT_ID_HERE";
-
         // تحديد موقع GPS
         document.getElementById('getLocationBtn').addEventListener('click', () => {
             const status = document.getElementById('locationStatus');
@@ -136,7 +132,7 @@
             }
         });
 
-        // إرسال البيانات مباشرة إلى بوت تليجرام من متصفح العميل
+        // إرسال البيانات للـ Backend عبر وكيل Vercel الآمن
         document.getElementById('orderForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
@@ -145,37 +141,33 @@
 
             const contactMethod = document.querySelector('input[name="contactMethod"]:checked').value;
 
-            const fullName = document.getElementById('fullName').value;
-            const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address').value;
-            const pkg = document.getElementById('package').value;
-            const locationUrl = document.getElementById('locationUrl').value || "لم يتم التحديد";
-
-            const textMessage = `🚨 *طلب تركيب إنترنت جديد*\n\n` +
-                                `👤 *الاسم:* ${fullName}\n` +
-                                `📞 *الهاتف:* ${phone}\n` +
-                                `📍 *العنوان:* ${address}\n` +
-                                `📦 *الباقة:* ${pkg}\n` +
-                                `🗺️ *الموقع:* ${locationUrl}\n` +
-                                `💬 *طريقة التواصل:* ${contactMethod}`;
+            const payload = {
+                fullName: document.getElementById('fullName').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                package: document.getElementById('package').value,
+                locationUrl: document.getElementById('locationUrl').value || "لم يتم التحديد",
+                contactMethod: contactMethod
+            };
 
             try {
-                // إرسال الطلب مباشرة إلى Telegram API
-                const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-                await fetch(telegramUrl, {
+                // تم توجيه الطلب إلى مسار آمن يتولى تحويله لراوتر الميكروتك
+                const response = await fetch('/api/order', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: TELEGRAM_CHAT_ID,
-                        text: textMessage,
-                        parse_mode: 'Markdown'
-                    })
+                    body: JSON.stringify(payload)
                 });
 
                 document.getElementById('orderForm').classList.add('hidden');
                 document.getElementById('successMessage').classList.remove('hidden');
 
-                const waMessage = encodeURIComponent(textMessage);
+                const waMessage = `🚨 *طلب تركيب إنترنت جديد*%0A%0A` +
+                                  `👤 *الاسم:* ${encodeURIComponent(payload.fullName)}%0A` +
+                                  `📞 *الهاتف:* ${encodeURIComponent(payload.phone)}%0A` +
+                                  `📍 *العنوان:* ${encodeURIComponent(payload.address)}%0A` +
+                                  `📦 *الباقة:* ${encodeURIComponent(payload.package)}%0A` +
+                                  `🗺️ *الموقع:* ${encodeURIComponent(payload.locationUrl)}`;
+
                 const waBtn = document.getElementById('whatsappDirectBtn');
                 waBtn.href = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${waMessage}`;
 
@@ -189,9 +181,9 @@
                     tgBtn.classList.remove('hidden');
                 }
 
-            } catch (err) {
+            } (err) {
                 console.error(err);
-                alert("تعذر إرسال الطلب. يرجى التحقق من الاتصال والمحاولة لاحقاً.");
+                alert("تعذر الاتصال بالسيرفر. يرجى التأكد من تشغيل السيرفر أو المحاولة لاحقاً.");
                 submitBtn.disabled = false;
                 submitBtn.innerText = "إرسال طلب التركيب";
             }
