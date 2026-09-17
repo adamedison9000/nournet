@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">نورنت | إنترنت عالي السرعة وحلول ذكية</title>
+    <title id="pageTitle">NOURNET | High-Speed Internet & Smart Solutions</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -298,7 +298,8 @@
 
 <div class="container">
     <div class="brand-header">
-        <h1>نورنت</h1>
+        <!-- العنوان ثابث لا يتغير عند تبديل اللغة -->
+        <h1>NOURNET</h1>
         <p id="brandSub">اختر باقتك واتصل فوراً</p>
     </div>
 
@@ -450,8 +451,7 @@ async function autoRedirectPortal(e) {
     }
 }
 
-// اللغة الافتراضية أصبحت العربية الآن
-let currentLang = 'ar';
+let currentLang = localStorage.getItem('nournet_lang') || 'ar';
 
 const translations = {
     en: {
@@ -542,6 +542,7 @@ const translations = {
 
 function toggleLanguage() {
     currentLang = currentLang === 'en' ? 'ar' : 'en';
+    localStorage.setItem('nournet_lang', currentLang);
     applyLanguage();
 }
 
