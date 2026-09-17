@@ -1,128 +1,201 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-import requests
-import sqlite3
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلب تركيب خدمة الإنترنت</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex items-center justify-center p-4">
 
-app = FastAPI()
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 md:p-8">
+        <!-- الهيدر -->
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-blue-600 mb-2">طلب تركيب اشتراك إنترنت</h1>
+            <p class="text-slate-500 text-sm">يرجى ملء البيانات التالية لتقديم طلب التوصيل وسيتم التواصل معك بأسرع وقت.</p>
+        </div>
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+        <!-- النموذج -->
+        <form id="orderForm" class="space-y-4">
+            <!-- الاسم الكامل -->
+            <div>
+                <label class="block text-sm font-semibold mb-1 text-slate-700">الاسم الكامل *</label>
+                <input type="text" id="fullName" required placeholder="أدخل اسمك الثلاثي" 
+                       class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
 
-TELEGRAM_BOT_TOKEN = "8785423339:AAFa1z7mfHn2uAHRhJGarioyiciSwYpqrxQ"
-TELEGRAM_CHAT_ID = "2055556738"
+            <!-- رقم الهاتف -->
+            <div>
+                <label class="block text-sm font-semibold mb-1 text-slate-700">رقم الهاتف *</label>
+                <input type="tel" id="phone" required placeholder="03XXXXXX" 
+                       class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
 
-def init_db():
-    conn = sqlite3.connect("orders.db")
-    cursor = conn.cursor()
-    
-    # جدول طلبات التركيب
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS orders (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            full_name TEXT,
-            phone TEXT,
-            address TEXT,
-            package TEXT,
-            location_url TEXT,
-            contact_method TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    
-    # جدول مناطق تغطية الـ Fiber الجديد
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS coverage_areas (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            area_name TEXT,
-            description TEXT,
-            lat REAL,
-            lng REAL,
-            status TEXT DEFAULT 'available'
-        )
-    ''')
-    
-    conn.commit()
-    conn.close()
+            <!-- البلدة / العنوان التفصيلي -->
+            <div>
+                <label class="block text-sm font-semibold mb-1 text-slate-700">البلدة / المنطقة والحارة *</label>
+                <input type="text" id="address" required placeholder="مثال: البقاع - اسم البلدة - الشارع العام" 
+                       class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
 
-init_db()
+            <!-- اختيار الباقة -->
+            <div>
+                <label class="block text-sm font-semibold mb-1 text-slate-700">اختر الباقة المطلوبة *</label>
+                <select id="package" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
+                    <option value="">-- اضغط لاختيار الباقة --</option>
+                    <option value="باقة منزلية اقتصادية">باقة منزلية اقتصادية (Speed Basic)</option>
+                    <option value="باقة منزلية فائقة">باقة منزلية فائقة (Speed Ultra)</option>
+                    <option value="باقة أصحاب الأعمال">باقة أعمال / تجارية (Business Plan)</option>
+                    <option value="باقة الـ Fiber Optic">باقة الألياف الضوئية (Fiber Plan)</option>
+                </select>
+            </div>
 
-class OrderSchema(BaseModel):
-    fullName: str
-    phone: str
-    address: str
-    package: str
-    locationUrl: str
-    contactMethod: str
+            <!-- طريقة التواصل المفضلة -->
+            <div>
+                <label class="block text-sm font-semibold mb-1 text-slate-700">طريقة التواصل المفضلة لديك *</label>
+                <div class="grid grid-cols-2 gap-3 mt-1">
+                    <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-slate-50 border-slate-300">
+                        <input type="radio" name="contactMethod" value="WhatsApp" checked class="text-blue-600 focus:ring-blue-500">
+                        <span class="text-sm font-medium text-slate-700">💬 واتساب</span>
+                    </label>
+                    <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-slate-50 border-slate-300">
+                        <input type="radio" name="contactMethod" value="Telegram/Phone" class="text-blue-600 focus:ring-blue-500">
+                        <span class="text-sm font-medium text-slate-700">✈️ تلغرام / اتصال</span>
+                    </label>
+                </div>
+            </div>
 
-class CoverageSchema(BaseModel):
-    areaName: str
-    description: str
-    lat: float
-    lng: float
-    status: str = "available" # متاح أو قريباً
+            <!-- الموقع الجغرافي GPS -->
+            <div>
+                <label class="block text-sm font-semibold mb-1 text-slate-700">الموقع الجغرافي (GPS)</label>
+                <button type="button" id="getLocationBtn" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 px-4 rounded-lg text-sm font-semibold transition flex items-center justify-center gap-2">
+                    📍 تحديد موقعي الحالي تلقائياً
+                </button>
+                <input type="hidden" id="locationUrl">
+                <p id="locationStatus" class="text-xs text-green-600 mt-1 hidden">✓ تم تحديد موقعك بنجاح</p>
+            </div>
 
-# 1. استقبال طلبات التركيب
-@app.post("/api/order")
-def create_order(order: OrderSchema):
-    conn = sqlite3.connect("orders.db")
-    cursor = conn.cursor()
-    cursor.execute('''
-        INSERT INTO orders (full_name, phone, address, package, location_url, contact_method)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''', (order.fullName, order.phone, order.address, order.package, order.locationUrl, order.contactMethod))
-    conn.commit()
-    conn.close()
+            <!-- زر الإرسال -->
+            <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-lg transition">
+                إرسال طلب التركيب
+            </button>
+        </form>
 
-    msg = (
-        f"🚨 *طلب تركيب جديد!*\n\n"
-        f"👤 *الاسم:* {order.fullName}\n"
-        f"📞 *الهاتف:* {order.phone}\n"
-        f"📍 *العنوان:* {order.address}\n"
-        f"📦 *الباقة:* {order.package}\n"
-        f"💬 *طريقة التواصل:* {order.contactMethod}\n"
-        f"🗺️ *الموقع:* {order.locationUrl}"
-    )
+        <!-- رسالة النجاح -->
+        <div id="successMessage" class="hidden text-center py-6">
+            <div class="text-green-500 text-5xl mb-3">✓</div>
+            <h2 class="text-xl font-bold text-slate-800 mb-1">تم تسجيل طلبك بنجاح!</h2>
+            <p class="text-slate-500 text-sm mb-6">شكراً لتواصلك معنا. تم استلام تفاصيل الطلب وسيتم التواصل معك قريباً.</p>
+            
+            <div id="actionButtons" class="space-y-3">
+                <a id="whatsappDirectBtn" href="#" target="_blank" class="hidden w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
+                    💬 إرسال نسخة من الطلب عبر واتساب
+                </a>
+                <a id="telegramDirectBtn" href="#" target="_blank" class="hidden w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
+                    ✈️ التواصل معنا عبر تلغرام
+                </a>
+            </div>
+        </div>
+    </div>
 
-    telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    requests.post(telegram_url, json={"chat_id": TELEGRAM_CHAT_ID, "text": msg, "parse_mode": "Markdown"})
+    <script>
+        const MY_WHATSAPP_NUMBER = "96171585414"; 
+        const MY_TELEGRAM_USERNAME = "nournetalibot"; 
 
-    return {"status": "success", "message": "Order created successfully"}
+        // بيانات بوت تليجرام الخاص بك (ضع الـ Token و Chat ID هنا)
+        const TELEGRAM_BOT_TOKEN = "YOUR_BOT_TOKEN_HERE";
+        const TELEGRAM_CHAT_ID = "YOUR_CHAT_ID_HERE";
 
-# 2. جلب مناطق التغطية لعرضها في الخريطة بالموقع
-@app.get("/api/coverage")
-def get_coverage_areas():
-    conn = sqlite3.connect("orders.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT area_name, description, lat, lng, status FROM coverage_areas")
-    rows = cursor.fetchall()
-    conn.close()
+        // تحديد موقع GPS
+        document.getElementById('getLocationBtn').addEventListener('click', () => {
+            const status = document.getElementById('locationStatus');
+            if (navigator.geolocation) {
+                status.innerText = "جاري جلب الموقع...";
+                status.classList.remove('hidden', 'text-green-600');
+                status.classList.add('text-slate-500');
 
-    areas = []
-    for row in rows:
-        areas.append({
-            "areaName": row[0],
-            "description": row[1],
-            "lat": row[2],
-            "lng": row[3],
-            "status": row[4]
-        })
-    return {"status": "success", "data": areas}
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    document.getElementById('locationUrl').value = `https://maps.google.com/?q=${lat},${lon}`;
+                    status.innerText = "✓ تم تحديد الموقع بنجاح!";
+                    status.classList.remove('text-slate-500');
+                    status.classList.add('text-green-600');
+                }, () => {
+                    alert("تعذر الحصول على الموقع تلقائياً، يمكنك إرسال الطلب وسنتواصل معك لتحديد العنوان.");
+                    status.classList.add('hidden');
+                });
+            } else {
+                alert("متصفحك لا يدعم تحديد الموقع الجغرافي.");
+            }
+        });
 
-# 3. إضافة منطقة جديدة لتغطية الـ Fiber (يمكنك إضافتها يدوياً أو عبر سكريبت)
-@app.post("/api/coverage")
-def add_coverage_area(area: CoverageSchema):
-    conn = sqlite3.connect("orders.db")
-    cursor = conn.cursor()
-    cursor.execute('''
-        INSERT INTO coverage_areas (area_name, description, lat, lng, status)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (area.areaName, area.description, area.lat, area.lng, area.status))
-    conn.commit()
-    conn.close()
-    return {"status": "success", "message": "Coverage area added successfully"}
+        // إرسال البيانات مباشرة إلى بوت تليجرام من متصفح العميل
+        document.getElementById('orderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "جاري الإرسال...";
+
+            const contactMethod = document.querySelector('input[name="contactMethod"]:checked').value;
+
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const pkg = document.getElementById('package').value;
+            const locationUrl = document.getElementById('locationUrl').value || "لم يتم التحديد";
+
+            const textMessage = `🚨 *طلب تركيب إنترنت جديد*\n\n` +
+                                `👤 *الاسم:* ${fullName}\n` +
+                                `📞 *الهاتف:* ${phone}\n` +
+                                `📍 *العنوان:* ${address}\n` +
+                                `📦 *الباقة:* ${pkg}\n` +
+                                `🗺️ *الموقع:* ${locationUrl}\n` +
+                                `💬 *طريقة التواصل:* ${contactMethod}`;
+
+            try {
+                // إرسال الطلب مباشرة إلى Telegram API
+                const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                await fetch(telegramUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: textMessage,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                document.getElementById('orderForm').classList.add('hidden');
+                document.getElementById('successMessage').classList.remove('hidden');
+
+                const waMessage = encodeURIComponent(textMessage);
+                const waBtn = document.getElementById('whatsappDirectBtn');
+                waBtn.href = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${waMessage}`;
+
+                const tgBtn = document.getElementById('telegramDirectBtn');
+                tgBtn.href = `https://t.me/${MY_TELEGRAM_USERNAME}`;
+
+                if (contactMethod === 'WhatsApp') {
+                    waBtn.classList.remove('hidden');
+                    window.open(waBtn.href, '_blank');
+                } else {
+                    tgBtn.classList.remove('hidden');
+                }
+
+            } catch (err) {
+                console.error(err);
+                alert("تعذر إرسال الطلب. يرجى التحقق من الاتصال والمحاولة لاحقاً.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "إرسال طلب التركيب";
+            }
+        });
+    </script>
+</body>
+</html>
