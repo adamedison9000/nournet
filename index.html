@@ -380,7 +380,7 @@
     </form>
 </div>
 
-<div class="faq-section">
+<div class="faq-section" style="margin-bottom: 40px;">
     <h2 id="faqHeader">💡 مركز المساعدة والأسئلة الشائعة</h2>
     
     <div class="faq-item">
@@ -399,11 +399,6 @@
     </div>
 </div>
 
-<!-- عدّاد عام إجمالي لجميع الزوار -->
-<div style="text-align: center; margin-bottom: 90px; font-size: 14px; color: #94a3b8; font-family: sans-serif;">
-    🌐 إجمالي زيارات الموقع: <span id="totalVisitCount" style="color: #38bdf8; font-weight: bold; font-size: 16px;">جاري التحميل...</span>
-</div>
-
 <!-- زر واتساب العائم -->
 <a href="https://wa.me/96171585414" target="_blank" rel="noopener noreferrer" style="position: fixed; bottom: 20px; right: 20px; background-color: #25d366; color: #ffffff; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px; z-index: 99999; font-family: sans-serif;">
   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.09-.39-.12-.56.12-.17.25-.66.8-.81.97-.15.17-.3.19-.55.07-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.43s-.56-1.35-.77-1.85c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.28 3.79.6.26 1.07.41 1.43.53.6.19 1.15.16 1.59.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/></svg>
@@ -411,27 +406,6 @@
 </a>
 
 <script>
-// عداد عام إجمالي لجميع الزوار (Global Counter)
-(function() {
-    const namespace = 'nournet_lb';
-    const key = 'total_visits';
-
-    fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-        .then(response => response.json())
-        .then(data => {
-            const countSpan = document.getElementById('totalVisitCount');
-            if (countSpan && data.value) {
-                countSpan.innerText = data.value.toLocaleString();
-            }
-        })
-        .catch(error => {
-            const countSpan = document.getElementById('totalVisitCount');
-            if (countSpan) {
-                countSpan.innerText = "1,245"; // قيمة احتياطية في حال انقطاع الاتصال بالخدمة
-            }
-        });
-})();
-
 async function autoRedirectPortal(e) {
     if (e) e.preventDefault();
     const portalBtn = document.getElementById('navPortal');
