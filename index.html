@@ -86,6 +86,42 @@
             margin: 0;
         }
 
+        /* Account Details Link Card */
+        .portal-card {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .portal-card p {
+            margin: 0 0 10px 0;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .portal-btn {
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            color: #ffffff;
+            padding: 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+        }
+
+        .portal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(6, 182, 212, 0.5);
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -167,6 +203,20 @@
             gap: 6px;
         }
 
+        .speedtest-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            margin-bottom: 25px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
         .faq-section {
             width: 100%;
             max-width: 520px;
@@ -177,7 +227,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             box-sizing: border-box;
-            margin-bottom: 25px;
+            margin-bottom: 90px;
         }
 
         .faq-section h2 {
@@ -203,21 +253,6 @@
         .faq-answer {
             color: #94a3b8;
             line-height: 1.4;
-        }
-
-        /* Speedtest Box */
-        .speedtest-container {
-            width: 100%;
-            max-width: 520px;
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            margin-bottom: 90px; /* مسافة كافية لمنع تداخل زر واتساب العائم */
-            box-sizing: border-box;
-            text-align: center;
         }
 
         button[type="submit"] {
@@ -259,6 +294,14 @@
     <div class="brand-header">
         <h1>NOURNET</h1>
         <p id="brandSub">Select your package & connect instantly</p>
+    </div>
+
+    <!-- قسم الانتقال إلى بوابة اشتراك المشترك -->
+    <div class="portal-card">
+        <p id="portalText">Already a subscriber? Check your account details & expiration date:</p>
+        <a href="https://user.netprolb.com/user.php" target="_blank" rel="noopener noreferrer" class="portal-btn" id="portalBtn">
+            👤 View Subscription Details / تفاصيل الاشتراك
+        </a>
     </div>
     
     <form id="telegramForm" onsubmit="sendToTelegram(event)">
@@ -327,7 +370,15 @@
     </form>
 </div>
 
-<!-- FAQ & Self-Service Section -->
+<!-- Speedtest Section -->
+<div class="speedtest-container">
+    <h2 id="speedTitle" style="font-size: 18px; color: #818cf8; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">⚡ Speed Test / فحص السرعة</h2>
+    <div style="position: relative; width: 100%; height: 500px; overflow: hidden; border-radius: 12px; background: rgba(0,0,0,0.2);">
+        <iframe src="https://openspeedtest.com/speedtest" style="width: 100%; height: 100%; border: none;" title="SpeedTest Widget" loading="lazy" allow="autoplay"></iframe>
+    </div>
+</div>
+
+<!-- FAQ Section -->
 <div class="faq-section">
     <h2 id="faqHeader">💡 Help Center & FAQ</h2>
     
@@ -344,14 +395,6 @@
     <div class="faq-item">
         <div class="faq-question" id="q3">Q: Can I upgrade my package later?</div>
         <div class="faq-answer" id="a3">Yes, you can upgrade your speed or quota at any time by contacting support.</div>
-    </div>
-</div>
-
-<!-- Speedtest Section (Placed right above WhatsApp Button) -->
-<div class="speedtest-container">
-    <h2 id="speedTitle" style="font-size: 18px; color: #818cf8; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">⚡ Speed Test / فحص السرعة</h2>
-    <div style="position: relative; width: 100%; height: 500px; overflow: hidden; border-radius: 12px; background: rgba(0,0,0,0.2);">
-        <iframe src="https://openspeedtest.com/speedtest" style="width: 100%; height: 100%; border: none;" title="SpeedTest Widget" loading="lazy" allow="autoplay"></iframe>
     </div>
 </div>
 
@@ -372,6 +415,8 @@ const translations = {
         langBtn: 'العربية 🇱🇧',
         pageTitle: 'NOURNET | High-Speed Internet & Smart Solutions',
         brandSub: 'Select your package & connect instantly',
+        portalText: 'Already a subscriber? Check your account details & expiration date:',
+        portalBtn: '👤 View Subscription Details',
         labelName: 'Full Name',
         placeholderName: 'Enter your full name',
         labelPhone: 'Phone Number (WhatsApp)',
@@ -411,6 +456,8 @@ const translations = {
         langBtn: 'English 🇺🇸',
         pageTitle: 'نورنت | إنترنت عالي السرعة وحلول ذكية',
         brandSub: 'اختر باقتك واتصل فوراً',
+        portalText: 'مشترك حالي؟ تحقق من تفاصيل حسابك وتاريخ انتهاء الاشتراك:',
+        portalBtn: '👤 عرض تفاصيل الاشتراك',
         labelName: 'الاسم الكامل',
         placeholderName: 'أدخل اسمك الكامل',
         labelPhone: 'رقم الهاتف (واتساب)',
@@ -462,6 +509,8 @@ function applyLanguage() {
     document.getElementById('langToggleBtn').innerText = t.langBtn;
     document.getElementById('pageTitle').innerText = t.pageTitle;
     document.getElementById('brandSub').innerText = t.brandSub;
+    document.getElementById('portalText').innerText = t.portalText;
+    document.getElementById('portalBtn').innerText = t.portalBtn;
     document.getElementById('labelName').innerText = t.labelName;
     document.getElementById('name').placeholder = t.placeholderName;
     document.getElementById('labelPhone').innerText = t.labelPhone;
