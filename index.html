@@ -25,7 +25,6 @@
             padding: 20px;
         }
 
-        /* Top Bar for Language Switcher */
         .top-bar {
             width: 100%;
             max-width: 520px;
@@ -151,7 +150,6 @@
             color: #fff;
         }
 
-        /* Smart Calculator Box */
         .smart-calc {
             background: rgba(79, 70, 229, 0.1);
             border: 1px dashed rgba(129, 140, 248, 0.4);
@@ -169,22 +167,6 @@
             gap: 6px;
         }
 
-        /* Speedtest Box */
-        .speedtest-container {
-            width: 100%;
-            max-width: 520px;
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            margin-bottom: 25px;
-            box-sizing: border-box;
-            text-align: center;
-        }
-
-        /* FAQ Section Style */
         .faq-section {
             width: 100%;
             max-width: 520px;
@@ -195,7 +177,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             box-sizing: border-box;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
         }
 
         .faq-section h2 {
@@ -221,6 +203,21 @@
         .faq-answer {
             color: #94a3b8;
             line-height: 1.4;
+        }
+
+        /* Speedtest Box */
+        .speedtest-container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            margin-bottom: 90px; /* مسافة كافية لمنع تداخل زر واتساب العائم */
+            box-sizing: border-box;
+            text-align: center;
         }
 
         button[type="submit"] {
@@ -291,7 +288,6 @@
             </div>
         </div>
 
-        <!-- Smart Plan Recommender (Calculator) -->
         <div class="smart-calc">
             <h3 id="calcTitle">⚡ Smart Plan Recommender</h3>
             <div class="form-group" style="margin-bottom: 10px;">
@@ -331,14 +327,6 @@
     </form>
 </div>
 
-<!-- Speedtest Section -->
-<div class="speedtest-container">
-    <h2 id="speedTitle" style="font-size: 18px; color: #818cf8; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">⚡ Speed Test / قياس السرعة</h2>
-    <div style="position: relative; width: 100%; height: 420px; overflow: hidden; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
-        <iframe src="https://openspeedtest.com/Get-widget.php?RegexSearch=true" style="width: 100%; height: 100%; border: none;" title="SpeedTest Widget" loading="lazy"></iframe>
-    </div>
-</div>
-
 <!-- FAQ & Self-Service Section -->
 <div class="faq-section">
     <h2 id="faqHeader">💡 Help Center & FAQ</h2>
@@ -356,6 +344,14 @@
     <div class="faq-item">
         <div class="faq-question" id="q3">Q: Can I upgrade my package later?</div>
         <div class="faq-answer" id="a3">Yes, you can upgrade your speed or quota at any time by contacting support.</div>
+    </div>
+</div>
+
+<!-- Speedtest Section (Placed right above WhatsApp Button) -->
+<div class="speedtest-container">
+    <h2 id="speedTitle" style="font-size: 18px; color: #818cf8; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">⚡ Speed Test / فحص السرعة</h2>
+    <div style="position: relative; width: 100%; height: 500px; overflow: hidden; border-radius: 12px; background: rgba(0,0,0,0.2);">
+        <iframe src="https://openspeedtest.com/speedtest" style="width: 100%; height: 100%; border: none;" title="SpeedTest Widget" loading="lazy" allow="autoplay"></iframe>
     </div>
 </div>
 
