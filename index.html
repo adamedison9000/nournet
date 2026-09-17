@@ -1,660 +1,128 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr" id="htmlRoot">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">NOURNET | Advanced Fiber & Wireless Internet</title>
-    <style>
-        :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --bg-gradient: linear-gradient(135deg, #090d16 0%, #171c33 100%);
-            --card-bg: rgba(255, 255, 255, 0.04);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --accent-glow: rgba(79, 70, 229, 0.25);
-        }
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import requests
+import sqlite3
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-gradient);
-            color: #f8fafc;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0;
-            padding: 20px;
-        }
+app = FastAPI()
 
-        .top-bar {
-            width: 100%;
-            max-width: 520px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-        .network-status-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #34d399;
-        }
+TELEGRAM_BOT_TOKEN = "8785423339:AAFa1z7mfHn2uAHRhJGarioyiciSwYpqrxQ"
+TELEGRAM_CHAT_ID = "2055556738"
 
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #34d399;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
-            70% { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
-        }
-
-        .lang-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-color);
-            color: #cbd5e1;
-            padding: 6px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .lang-btn:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-
-        .container {
-            width: 100%;
-            max-width: 520px;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            padding: 35px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            margin-bottom: 25px;
-            box-sizing: border-box;
-        }
-
-        .brand-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .brand-header h1 {
-            font-size: 30px;
-            font-weight: 900;
-            letter-spacing: 2.5px;
-            margin: 0 0 6px 0;
-            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .brand-header p {
-            color: #94a3b8;
-            font-size: 13px;
-            margin: 0;
-            font-weight: 500;
-        }
-
-        .diag-box {
-            background: rgba(79, 70, 229, 0.08);
-            border: 1px solid rgba(129, 140, 248, 0.2);
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-        }
-
-        .diag-title {
-            color: #a5b4fc;
-            font-weight: 600;
-        }
-
-        .diag-value {
-            color: #34d399;
-            font-weight: 700;
-            font-family: monospace;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 7px;
-            color: #cbd5e1;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 13px 16px;
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 14px;
-            color: #fff;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-
-        select option {
-            background: #0f172a;
-            color: #fff;
-        }
-
-        .location-wrapper {
-            display: flex;
-            gap: 10px;
-        }
-
-        .location-wrapper input {
-            flex: 1;
-        }
-
-        .loc-btn {
-            background: rgba(79, 70, 229, 0.15);
-            border: 1px solid rgba(129, 140, 248, 0.4);
-            color: #818cf8;
-            padding: 0 14px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .loc-btn:hover {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        .smart-calc {
-            background: rgba(79, 70, 229, 0.06);
-            border: 1px dashed rgba(129, 140, 248, 0.3);
-            padding: 14px;
-            border-radius: 12px;
-            margin-bottom: 18px;
-        }
-
-        .smart-calc h3 {
-            font-size: 13px;
-            color: #818cf8;
-            margin: 0 0 8px 0;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .faq-section {
-            width: 100%;
-            max-width: 520px;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            padding: 25px 35px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            box-sizing: border-box;
-        }
-
-        .faq-section h2 {
-            font-size: 16px;
-            color: #818cf8;
-            margin-top: 0;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        .faq-item {
-            margin-bottom: 14px;
-            font-size: 12px;
-        }
-
-        .faq-question {
-            font-weight: 600;
-            color: #cbd5e1;
-            margin-bottom: 3px;
-        }
-
-        .faq-answer {
-            color: #94a3b8;
-            line-height: 1.4;
-        }
-
-        button[type="submit"] {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
-            margin-top: 5px;
-        }
-
-        button[type="submit"]:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(79, 70, 229, 0.6);
-        }
-
-        #status {
-            margin-top: 15px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 13px;
-        }
-    </style>
-</head>
-<body>
-
-<div class="top-bar">
-    <div class="network-status-badge">
-        <div class="pulse-dot"></div>
-        <span id="networkStatusText">Beqaa Nodes: Optimal</span>
-    </div>
-    <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">العربية 🇱🇧</button>
-</div>
-
-<div class="container">
-    <div class="brand-header">
-        <h1>NOURNET</h1>
-        <p id="brandSub">Advanced Fiber & Wireless Internet Provider</p>
-    </div>
-
-    <!-- Light Diagnostic Widget (Zero Load Simulation) -->
-    <div class="diag-box">
-        <span class="diag-title" id="diagTitle">⚡ Gateway Latency Check:</span>
-        <span class="diag-value" id="diagResult">4 ms (Optimal)</span>
-    </div>
+def init_db():
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
     
-    <form id="telegramForm" onsubmit="sendToTelegram(event)">
-        <div class="form-group">
-            <label for="name" id="labelName">Full Name</label>
-            <input type="text" id="name" required placeholder="Enter your full name">
-        </div>
-        
-        <div class="form-group">
-            <label for="phone" id="labelPhone">WhatsApp Number</label>
-            <input type="tel" id="phone" required placeholder="03xxxxxx or 70xxxxxx">
-        </div>
-
-        <div class="form-group">
-            <label for="connectionType" id="labelConnType">Connection Type</label>
-            <select id="connectionType" required>
-                <option value="Fiber" id="optFiber">Fiber Optics (High Speed / FTTH)</option>
-                <option value="Wireless" id="optWireless">Wireless (Point-to-Point Beam)</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="installSlot" id="labelSlot">Preferred Installation Window</label>
-            <select id="installSlot">
-                <option value="Morning (9 AM - 1 PM)" id="slotMorning">Morning Session (9:00 AM - 1:00 PM)</option>
-                <option value="Afternoon (2 PM - 6 PM)" id="slotAfternoon">Afternoon Session (2:00 PM - 6:00 PM)</option>
-                <option value="ASAP / Emergency" id="slotAsap">ASAP / First Available Slot</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="location" id="labelLoc">Location / Area</label>
-            <div class="location-wrapper">
-                <input type="text" id="location" required placeholder="Enter area or get GPS">
-                <button type="button" class="loc-btn" id="btnGps" onclick="getLocation()">📍 Get GPS</button>
-            </div>
-        </div>
-
-        <div class="smart-calc">
-            <h3 id="calcTitle">⚡ Smart Plan Recommender</h3>
-            <div class="form-group" style="margin-bottom: 8px;">
-                <label for="usageType" id="labelUsage" style="font-size: 11px;">Primary Household Use:</label>
-                <select id="usageType" onchange="recommendPlan()">
-                    <option value="light" id="useLight">Light Browsing & Social Media (1-3 Devices)</option>
-                    <option value="family" id="useFamily" selected>Family & 4K Streaming (4-8 Devices)</option>
-                    <option value="gaming" id="useGaming">Pro Gaming & Heavy Download (Low Ping)</option>
-                </select>
-            </div>
-            <p id="recommendationText" style="font-size: 12px; color: #a5b4fc; margin: 4px 0 0 0;"></p>
-        </div>
-
-        <div class="form-group">
-            <label for="package" id="labelPkg">Choose Package</label>
-            <select id="package">
-                <optgroup label="Standard & Shared Packages" id="optGroupStd">
-                    <option value="Up to 4MB 300GB+FN (25 USD)">Up to 4MB 300GB + FN — 25 USD</option>
-                    <option value="Up to 16MB 550GB+FN (30 USD)">Up to 16MB 550GB + FN — 30 USD</option>
-                    <option value="Up to 24MB 660GB+FN (35 USD)" selected>Up to 24MB 660GB + FN — 35 USD</option>
-                    <option value="Up to 32MB 770GB+FN (40 USD)">Up to 32MB 770GB + FN — 40 USD</option>
-                    <option value="Up to 48MB 880GB+FN (45 USD)">Up to 48MB 880GB + FN — 45 USD</option>
-                    <option value="Up to 54MB 990GB+FN (50 USD)">Up to 54MB 990GB + FN — 50 USD</option>
-                    <option value="Up to 80MB 1.1TB+FN (100 USD)">Up to 80MB 1.1TB + FN — 100 USD</option>
-                </optgroup>
-                <optgroup label="Gaming & Dedicated Packages" id="optGroupGam">
-                    <option value="Gaming (75 USD)">Gaming — 75 USD</option>
-                    <option value="4M-Dedicated (150 USD)">4M-Dedicated — 150 USD</option>
-                    <option value="6M-Dedicated (230 USD)">6M-Dedicated — 230 USD</option>
-                    <option value="8M-Dedicated (330 USD)">8M-Dedicated — 330 USD</option>
-                </optgroup>
-            </select>
-        </div>
-
-        <button type="submit" id="submitBtn">Submit Connection Request</button>
-        <p id="status"></p>
-    </form>
-</div>
-
-<div class="faq-section">
-    <h2 id="faqHeader">💡 Technical Help & FAQs</h2>
+    # جدول طلبات التركيب
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            full_name TEXT,
+            phone TEXT,
+            address TEXT,
+            package TEXT,
+            location_url TEXT,
+            contact_method TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
     
-    <div class="faq-item">
-        <div class="faq-question" id="q1">Q: What is the average deployment turnaround?</div>
-        <div class="faq-answer" id="a1">Standard connections are provisioned and tested within 24–48 hours after site confirmation.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" id="q2">Q: How does the Smart Ping benefit gamers?</div>
-        <div class="faq-answer" id="a2">Our gaming profiles prioritize routing tables through low-jitter uplinks to minimize packet loss.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" id="q3">Q: Can I request dynamic quota adjustments?</div>
-        <div class="faq-answer" id="a3">Yes, capacity upgrades can be applied instantly by communicating with our technical desk.</div>
-    </div>
-</div>
-
-<script>
-let currentLang = 'en';
-
-const translations = {
-    en: {
-        dir: 'ltr',
-        langBtn: 'العربية 🇱🇧',
-        pageTitle: 'NOURNET | Advanced Fiber & Wireless Internet',
-        brandSub: 'Advanced Fiber & Wireless Internet Provider',
-        networkStatus: 'Beqaa Nodes: Optimal',
-        diagTitle: '⚡ Gateway Latency Check:',
-        labelName: 'Full Name',
-        placeholderName: 'Enter your full name',
-        labelPhone: 'WhatsApp Number',
-        placeholderPhone: '03xxxxxx or 70xxxxxx',
-        labelConnType: 'Connection Type',
-        optFiber: 'Fiber Optics (High Speed / FTTH)',
-        optWireless: 'Wireless (Point-to-Point Beam)',
-        labelSlot: 'Preferred Installation Window',
-        slotMorning: 'Morning Session (9:00 AM - 1:00 PM)',
-        slotAfternoon: 'Afternoon Session (2:00 PM - 6:00 PM)',
-        slotAsap: 'ASAP / First Available Slot',
-        labelLoc: 'Location / Area',
-        placeholderLoc: 'Enter area or get GPS',
-        btnGps: '📍 Get GPS',
-        calcTitle: '⚡ Smart Plan Recommender',
-        labelUsage: 'Primary Household Use:',
-        useLight: 'Light Browsing & Social Media (1-3 Devices)',
-        useFamily: 'Family & 4K Streaming (4-8 Devices)',
-        useGaming: 'Pro Gaming & Heavy Download (Low Ping)',
-        labelPkg: 'Choose Package',
-        optGroupStd: 'Standard & Shared Packages',
-        optGroupGam: 'Gaming & Dedicated Packages',
-        submitBtn: 'Submit Connection Request',
-        submitting: 'Transmitting Request...',
-        successMsg: '✨ Connection request logged! Our technical team will dispatch shortly.',
-        errorMsg: '❌ Transmission failed, please verify details.',
-        connErrorMsg: '⚠️ Network unreachable, check your connection.',
-        gpsFetching: 'Locking GPS Coordinates...',
-        gpsError: 'Unable to acquire position. Please input manually.',
-        gpsNotSupported: 'Geolocation services not supported.',
-        faqHeader: '💡 Technical Help & FAQs',
-        q1: 'Q: What is the average deployment turnaround?',
-        a1: 'Standard connections are provisioned and tested within 24–48 hours after site confirmation.',
-        q2: 'Q: How does the Smart Ping benefit gamers?',
-        a2: 'Our gaming profiles prioritize routing tables through low-jitter uplinks to minimize packet loss.',
-        q3: 'Q: Can I request dynamic quota adjustments?',
-        a3: 'Yes, capacity upgrades can be applied instantly by communicating with our technical desk.'
-    },
-    ar: {
-        dir: 'rtl',
-        langBtn: 'English 🇺🇸',
-        pageTitle: 'نورنت | شبكة الإنترنت والحلول الذكية المتطورة',
-        brandSub: 'مزود خدمة الإنترنت اللاسلكي والألياف الضوئية المتقدم',
-        networkStatus: 'عقد البقاع: ممتازة ومستقرة',
-        diagTitle: '⚡ فحص استجابة البوابة المحلية:',
-        labelName: 'الاسم الكامل',
-        placeholderName: 'أدخل اسمك الكامل',
-        labelPhone: 'رقم الواتساب',
-        placeholderPhone: '03xxxxxx أو 70xxxxxx',
-        labelConnType: 'نوع خط الاتصال',
-        optFiber: 'ألياف ضوئية FTTH (سرعات فائقة)',
-        optWireless: 'لاسلكي عالي التردد (Wireless Link)',
-        labelSlot: 'وقت التركيب المفضل',
-        slotMorning: 'الفترة الصباحية (9:00 صباحاً - 1:00 ظهراً)',
-        slotAfternoon: 'الفترة المسائية (2:00 عصراً - 6:00 مساءً)',
-        slotAsap: 'في أسرع وقت ممكن (Emergency)',
-        labelLoc: 'المنطقة أو العنوان',
-        placeholderLoc: 'أدخل اسم المنطقة أو اضغط احداثيات GPS',
-        btnGps: '📍 احداثيات GPS',
-        calcTitle: '⚡ حاسبة الباقات الذكية',
-        labelUsage: 'طبيعة الاستخدام المنزلي:',
-        useLight: 'تصفح خفيف ومواقع تواصل (1-3 أجهزة)',
-        useFamily: 'عائلة وبث 4K وأجهزة متعددة (4-8 أجهزة)',
-        useGaming: 'ألعاب محترفة وتحميل كثيف (بينغ منخفض)',
-        labelPkg: 'اختر الباقة المطلوبة',
-        optGroupStd: 'الباقات العادية والمشتركة',
-        optGroupGam: 'باقات الألعاب والخطوط المخصصة',
-        submitBtn: 'إرسال طلب التوصيل',
-        submitting: 'جاري إرسال الطلب للنظام...',
-        successMsg: '✨ تم تسجيل طلبك بنجاح! سيتواصل معك القسم الفني للتركيب.',
-        errorMsg: '❌ حدث خطأ في الإرسال، يرجى المحاولة.',
-        connErrorMsg: '⚠️ خطأ بالاتصال، تحقق من شبكتك.',
-        gpsFetching: 'جاري تحديد الإحداثيات بدقة...',
-        gpsError: 'تعذر تحديد الموقع، يرجى كتابته يدوياً.',
-        gpsNotSupported: 'خدمة تحديد الموقع غير مدعومة.',
-        faqHeader: '💡 الدعم الفني والأسئلة التقنية',
-        q1: 'س: ما هي مدة إنجاز التركيب الفعلي؟',
-        a1: 'عادة يتم التوصيل والفحص الفني خلال 24 إلى 48 ساعة كحد أقصى من تثبيت الطلب.',
-        q2: 'س: كيف تخدم باقات الألعاب اللاعبين؟',
-        a2: 'تعتمد على مسارات توجيه (Routing) مخصصة ذات استجابة منخفضة لتفادي الـ Lag.',
-        q3: 'س: هل يمكن تعديل السعة أو السرعة لاحقاً؟',
-        a3: 'بالتأكيد، يمكن ترقية الخط لحظياً بالتواصل المباشر مع مكتب الإدارة الفنية.'
-    }
-};
-
-window.onload = function() {
-    applyLanguage();
-};
-
-function toggleLanguage() {
-    currentLang = currentLang === 'en' ? 'ar' : 'en';
-    applyLanguage();
-}
-
-function applyLanguage() {
-    const t = translations[currentLang];
-    const root = document.getElementById('htmlRoot');
+    # جدول مناطق تغطية الـ Fiber الجديد
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS coverage_areas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            area_name TEXT,
+            description TEXT,
+            lat REAL,
+            lng REAL,
+            status TEXT DEFAULT 'available'
+        )
+    ''')
     
-    root.setAttribute('lang', currentLang);
-    root.setAttribute('dir', t.dir);
+    conn.commit()
+    conn.close()
 
-    document.getElementById('langToggleBtn').innerText = t.langBtn;
-    document.getElementById('pageTitle').innerText = t.pageTitle;
-    document.getElementById('brandSub').innerText = t.brandSub;
-    document.getElementById('networkStatusText').innerText = t.networkStatus;
-    document.getElementById('diagTitle').innerText = t.diagTitle;
-    document.getElementById('labelName').innerText = t.labelName;
-    document.getElementById('name').placeholder = t.placeholderName;
-    document.getElementById('labelPhone').innerText = t.labelPhone;
-    document.getElementById('phone').placeholder = t.placeholderPhone;
-    document.getElementById('labelConnType').innerText = t.labelConnType;
-    document.getElementById('optFiber').innerText = t.optFiber;
-    document.getElementById('optWireless').innerText = t.optWireless;
-    document.getElementById('labelSlot').innerText = t.labelSlot;
-    document.getElementById('slotMorning').innerText = t.slotMorning;
-    document.getElementById('slotAfternoon').innerText = t.slotAfternoon;
-    document.getElementById('slotAsap').innerText = t.slotAsap;
-    document.getElementById('labelLoc').innerText = t.labelLoc;
-    document.getElementById('location').placeholder = t.placeholderLoc;
-    document.getElementById('btnGps').innerText = t.btnGps;
-    document.getElementById('calcTitle').innerText = t.calcTitle;
-    document.getElementById('labelUsage').innerText = t.labelUsage;
-    document.getElementById('useLight').innerText = t.useLight;
-    document.getElementById('useFamily').innerText = t.useFamily;
-    document.getElementById('useGaming').innerText = t.useGaming;
-    document.getElementById('labelPkg').innerText = t.labelPkg;
-    document.getElementById('optGroupStd').label = t.optGroupStd;
-    document.getElementById('optGroupGam').label = t.optGroupGam;
-    document.getElementById('submitBtn').innerText = t.submitBtn;
-    document.getElementById('faqHeader').innerText = t.faqHeader;
-    document.getElementById('q1').innerText = t.q1;
-    document.getElementById('a1').innerText = t.a1;
-    document.getElementById('q2').innerText = t.q2;
-    document.getElementById('a2').innerText = t.a2;
-    document.getElementById('q3').innerText = t.q3;
-    document.getElementById('a3').innerText = t.a3;
+init_db()
 
-    recommendPlan();
-}
+class OrderSchema(BaseModel):
+    fullName: str
+    phone: str
+    address: str
+    package: str
+    locationUrl: str
+    contactMethod: str
 
-function recommendPlan() {
-    const usage = document.getElementById('usageType').value;
-    const pkgSelect = document.getElementById('package');
-    const recText = document.getElementById('recommendationText');
+class CoverageSchema(BaseModel):
+    areaName: str
+    description: str
+    lat: float
+    lng: float
+    status: str = "available" # متاح أو قريباً
 
-    if (currentLang === 'ar') {
-        if (usage === 'light') {
-            pkgSelect.value = "Up to 16MB 550GB+FN (30 USD)";
-            recText.innerText = "💡 موصى به: باقة 16 ميغابايت (الأنسب للتصفح الخفيف)";
-        } else if (usage === 'family') {
-            pkgSelect.value = "Up to 24MB 660GB+FN (35 USD)";
-            recText.innerText = "💡 موصى به: باقة 24 ميغابايت (مثالية للعائلة وبث الفيديو العالي)";
-        } else if (usage === 'gaming') {
-            pkgSelect.value = "Gaming (75 USD)";
-            recText.innerText = "💡 موصى به: باقة الألعاب الاحترافية Gaming (بينغ منخفض للغاية)";
-        }
-    } else {
-        if (usage === 'light') {
-            pkgSelect.value = "Up to 16MB 550GB+FN (30 USD)";
-            recText.innerText = "💡 Recommended: Up to 16MB (Best value for basic usage)";
-        } else if (usage === 'family') {
-            pkgSelect.value = "Up to 24MB 660GB+FN (35 USD)";
-            recText.innerText = "💡 Recommended: Up to 24MB (Great for streaming & multiple devices)";
-        } else if (usage === 'gaming') {
-            pkgSelect.value = "Gaming (75 USD)";
-            recText.innerText = "💡 Recommended: Gaming Package (Optimized low-latency for gamers)";
-        }
-    }
-}
+# 1. استقبال طلبات التركيب
+@app.post("/api/order")
+def create_order(order: OrderSchema):
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO orders (full_name, phone, address, package, location_url, contact_method)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', (order.fullName, order.phone, order.address, order.package, order.locationUrl, order.contactMethod))
+    conn.commit()
+    conn.close()
 
-function getLocation() {
-    const locInput = document.getElementById('location');
-    const t = translations[currentLang];
-    if (navigator.geolocation) {
-        locInput.value = t.gpsFetching;
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                locInput.value = `https://maps.google.com/?q=${lat},${lon}`;
-            },
-            (error) => {
-                locInput.value = "";
-                alert(t.gpsError);
-            }
-        );
-    } else {
-        alert(t.gpsNotSupported);
-    }
-}
+    msg = (
+        f"🚨 *طلب تركيب جديد!*\n\n"
+        f"👤 *الاسم:* {order.fullName}\n"
+        f"📞 *الهاتف:* {order.phone}\n"
+        f"📍 *العنوان:* {order.address}\n"
+        f"📦 *الباقة:* {order.package}\n"
+        f"💬 *طريقة التواصل:* {order.contactMethod}\n"
+        f"🗺️ *الموقع:* {order.locationUrl}"
+    )
 
-async function sendToTelegram(event) {
-    event.preventDefault();
-    
-    const submitBtn = document.getElementById('submitBtn');
-    const status = document.getElementById('status');
-    const t = translations[currentLang];
-    
-    const name = document.getElementById('name').value;
-    const phone = document.getElementById('phone').value;
-    const connectionType = document.getElementById('connectionType').value;
-    const installSlot = document.getElementById('installSlot').value;
-    const location = document.getElementById('location').value;
-    const pkg = document.getElementById('package').value;
+    telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    requests.post(telegram_url, json={"chat_id": TELEGRAM_CHAT_ID, "text": msg, "parse_mode": "Markdown"})
 
-    submitBtn.disabled = true;
-    submitBtn.innerText = t.submitting;
-    status.style.color = "#94a3b8";
-    status.innerText = "";
+    return {"status": "success", "message": "Order created successfully"}
 
-    try {
-        const response = await fetch('/api/send-telegram', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                name, 
-                phone, 
-                location: `${location} (Type: ${connectionType} | Slot: ${installSlot})`, 
-                package: pkg 
-            })
-        });
+# 2. جلب مناطق التغطية لعرضها في الخريطة بالموقع
+@app.get("/api/coverage")
+def get_coverage_areas():
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT area_name, description, lat, lng, status FROM coverage_areas")
+    rows = cursor.fetchall()
+    conn.close()
 
-        const result = await response.json();
+    areas = []
+    for row in rows:
+        areas.append({
+            "areaName": row[0],
+            "description": row[1],
+            "lat": row[2],
+            "lng": row[3],
+            "status": row[4]
+        })
+    return {"status": "success", "data": areas}
 
-        if (response.ok && result.success) {
-            status.style.color = "#34d399";
-            status.innerText = t.successMsg;
-            document.getElementById('telegramForm').reset();
-            recommendPlan();
-        } else {
-            status.style.color = "#f87171";
-            status.innerText = t.errorMsg;
-        }
-    } catch (error) {
-        status.style.color = "#f87171";
-        status.innerText = t.connErrorMsg;
-    }
-
-    submitBtn.disabled = false;
-    submitBtn.innerText = t.submitBtn;
-}
-</script>
-
-</body>
-</html>
+# 3. إضافة منطقة جديدة لتغطية الـ Fiber (يمكنك إضافتها يدوياً أو عبر سكريبت)
+@app.post("/api/coverage")
+def add_coverage_area(area: CoverageSchema):
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO coverage_areas (area_name, description, lat, lng, status)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (area.areaName, area.description, area.lat, area.lng, area.status))
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": "Coverage area added successfully"}
