@@ -86,7 +86,6 @@
             margin: 0;
         }
 
-        /* Navigation Buttons Container */
         .nav-buttons-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -106,6 +105,7 @@
             text-align: center;
             transition: all 0.3s ease;
             border: 1px solid var(--border-color);
+            cursor: pointer;
         }
 
         .btn-speed {
@@ -302,7 +302,7 @@
         <p id="brandSub">Select your package & connect instantly</p>
     </div>
 
-    <!-- أزرار التنقل للصفحات الفرعية -->
+    <!-- أزرار التنقل -->
     <div class="nav-buttons-container">
         <a href="speedtest.html" class="nav-link-btn btn-speed" id="navSpeed">
             ⚡ Speed Test
@@ -310,7 +310,8 @@
         <a href="coverage.html" class="nav-link-btn btn-map" id="navMap">
             🗺️ Coverage Map
         </a>
-        <a href="https://user.netprolb.com/user.php" target="_blank" rel="noopener noreferrer" class="nav-link-btn btn-portal" id="navPortal">
+        <!-- زر التوجيه الذكي لحساب الزبون -->
+        <a onclick="autoRedirectPortal(event)" class="nav-link-btn btn-portal" id="navPortal">
             👤 Subscription Details
         </a>
     </div>
@@ -406,6 +407,38 @@
 </a>
 
 <script>
+// ==========================================
+// 📍 أضف نطاقات الـ IP الخاصة بشركاتك هنا:
+// ==========================================
+const NETPRO_IP_PREFIX = "192.168.10.";  // عدل هذا الرقم ببادئة IP شركة NetPro
+const TERRANET_IP_PREFIX = "192.168.20."; // عدل هذا الرقم ببادئة IP شركة TerraNet
+
+async function autoRedirectPortal(e) {
+    if (e) e.preventDefault();
+    const portalBtn = document.getElementById('navPortal');
+    const oldText = portalBtn.innerText;
+    portalBtn.innerText = "⏳ Checking IP / جاري التحقق...";
+
+    try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        const userIp = data.ip;
+
+        if (userIp.startsWith(NETPRO_IP_PREFIX)) {
+            window.open("https://user.netprolb.com/user.php", "_blank");
+        } else if (userIp.startsWith(TERRANET_IP_PREFIX)) {
+            window.open("https://acppro.terra.net.lb/login", "_blank");
+        } else {
+            // إذا كان الـ IP غير معروف أو الزبون يفتح من 4G فتح صفحة الاختيار
+            window.location.href = "portal.html";
+        }
+    } catch (err) {
+        window.location.href = "portal.html";
+    } finally {
+        portalBtn.innerText = oldText;
+    }
+}
+
 let currentLang = 'en';
 
 const translations = {
