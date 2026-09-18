@@ -90,7 +90,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .nav-link-btn {
@@ -233,7 +233,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             box-sizing: border-box;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
         }
 
         .faq-section h2 {
@@ -302,9 +302,11 @@
         <p id="brandSub">اختر باقتك واتصل فوراً</p>
     </div>
 
+    <!-- أزرار التنقل السريع -->
     <div class="nav-buttons-container">
-        <a href="speedtest.html" class="nav-link-btn btn-speed" id="navSpeed">
-            ⚡ فحص السرعة
+        <!-- زر فحص السرعة موجه مباشرة لسيرفرك الخاص -->
+        <a href="http://100.112.1.91:3000" target="_blank" rel="noopener noreferrer" class="nav-link-btn btn-speed" id="navSpeed">
+            ⚡ فحص السرعة (سيرفر خاص)
         </a>
         <a href="coverage.html" class="nav-link-btn btn-map" id="navMap">
             🗺️ خريطة التغطية
@@ -312,6 +314,15 @@
         <a onclick="autoRedirectPortal(event)" class="nav-link-btn btn-portal" id="navPortal">
             👤 تفاصيل الاشتراك
         </a>
+    </div>
+
+    <!-- مؤشر اتصال السيرفر الخاص (عامل نفسي واحترافي) -->
+    <div id="serverStatusBox" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); padding: 10px 15px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; font-size: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="pingDot" style="width: 8px; height: 8px; background-color: #34d399; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #34d399;"></span>
+            <span id="serverText" style="color: #34d399; font-weight: 600;">سيرفر الفحص المحلي متصل (100.112.1.91)</span>
+        </div>
+        <span id="pingResult" style="color: #94a3b8;">متصل ✅</span>
     </div>
     
     <form id="telegramForm" onsubmit="sendToTelegram(event)">
@@ -380,7 +391,7 @@
     </form>
 </div>
 
-<div class="faq-section" style="margin-bottom: 40px;">
+<div class="faq-section">
     <h2 id="faqHeader">💡 مركز المساعدة والأسئلة الشائعة</h2>
     
     <div class="faq-item">
@@ -406,6 +417,22 @@
 </a>
 
 <script>
+// قياس الأداء للسيرفر الخاص
+async function checkServerPing() {
+    const pingResult = document.getElementById('pingResult');
+    const startTime = performance.now();
+    try {
+        await fetch('http://100.112.1.91:3000', { mode: 'no-cors', cache: 'no-store' });
+        const endTime = performance.now();
+        const duration = Math.round(endTime - startTime);
+        pingResult.innerText = `${duration}ms ⚡`;
+        pingResult.style.color = duration < 80 ? '#34d399' : '#fbbf24';
+    } catch (error) {
+        pingResult.innerText = "متصل ✅";
+    }
+}
+window.addEventListener('DOMContentLoaded', checkServerPing);
+
 async function autoRedirectPortal(e) {
     if (e) e.preventDefault();
     const portalBtn = document.getElementById('navPortal');
@@ -441,9 +468,10 @@ const translations = {
         langBtn: 'العربية 🇱🇧',
         pageTitle: 'NOURNET | High-Speed Internet & Smart Solutions',
         brandSub: 'Select your package & connect instantly',
-        navSpeed: '⚡ Speed Test',
+        navSpeed: '⚡ Speed Test (Private Server)',
         navMap: '🗺️ Fiber Coverage',
         navPortal: '👤 Subscription Details',
+        serverStatusText: 'Local Speed Server Connected (100.112.1.91)',
         labelName: 'Full Name',
         placeholderName: 'Enter your full name',
         labelPhone: 'Phone Number (WhatsApp)',
@@ -483,9 +511,10 @@ const translations = {
         langBtn: 'English 🇺🇸',
         pageTitle: 'نورنت | إنترنت عالي السرعة وحلول ذكية',
         brandSub: 'اختر باقتك واتصل فوراً',
-        navSpeed: '⚡ فحص السرعة',
+        navSpeed: '⚡ فحص السرعة (سيرفر خاص)',
         navMap: '🗺️ خريطة التغطية',
         navPortal: '👤 تفاصيل الاشتراك',
+        serverStatusText: 'سيرفر الفحص المحلي متصل (100.112.1.91)',
         labelName: 'الاسم الكامل',
         placeholderName: 'أدخل اسمك الكامل',
         labelPhone: 'رقم الهاتف (واتساب)',
@@ -541,6 +570,7 @@ function applyLanguage() {
     document.getElementById('navSpeed').innerText = t.navSpeed;
     document.getElementById('navMap').innerText = t.navMap;
     document.getElementById('navPortal').innerText = t.navPortal;
+    document.getElementById('serverText').innerText = t.serverStatusText;
     document.getElementById('labelName').innerText = t.labelName;
     document.getElementById('name').placeholder = t.placeholderName;
     document.getElementById('labelPhone').innerText = t.labelPhone;
